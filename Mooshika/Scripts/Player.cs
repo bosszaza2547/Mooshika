@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Mooshika.Scripts
@@ -188,6 +189,7 @@ namespace Mooshika.Scripts
             AttackRectangle2.X = (int)AttackPosition.X;
             AttackRectangle2.Y = (int)AttackPosition.Y;
             PreviousKeyBoardState = KeyboardState;
+            Debug.WriteLine(Rectangle.Y-Rectangle.Height);
         }
         public void MeleeEnemiesCollision()
         {
@@ -361,8 +363,10 @@ namespace Mooshika.Scripts
         public override void Draw(SpriteBatch SpriteBatch)
         {
             //SpriteBatch.Draw(Texture, Rectangle, Rectangle, Color, 0, Vector2.Zero, SpriteEffects.None, 0);
-            SpriteBatch.Draw(Texture, Position, new Rectangle(0,0,(int)Scale.X,(int)Scale.Y), Color, 0, Vector2.Zero, 1, (Direction == 1)? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-            SpriteBatch.Draw(pixel, AttackPosition, AttackCombo == AttackMaxCombo ? AttackRectangle2 : AttackRectangle, Attacking ? Color.Red : Color.Green, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            //SpriteBatch.Draw(Texture, Position, new Rectangle(0,0,(int)Scale.X,(int)Scale.Y), Color, 0, Vector2.Zero, 1, (Direction == 1)? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+            //SpriteBatch.Draw(pixel, AttackPosition, AttackCombo == AttackMaxCombo ? AttackRectangle2 : AttackRectangle, Attacking ? Color.Red : Color.Green, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+            SpriteBatch.Draw(Texture,Rectangle,Color.White);
+        
         }
         
     }
