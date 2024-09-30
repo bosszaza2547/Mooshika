@@ -108,7 +108,7 @@ namespace Mooshika.Scripts
             {
                 Rectangle rectangle = new Rectangle((int)enemy.Key.X * tilesize, (int)enemy.Key.Y * tilesize, tilesize, tilesize);
                 if (enemy.Value % collisionrow == 0)
-                    MeleeEnemies.Add(new MeleeEnemy(Content.Load<Texture2D>("Sprites/enemy (2)"), new Vector2(enemy.Key.X * tilesize, enemy.Key.Y * tilesize), new Vector2(100, 100), Color.White, Window, 1));
+                    MeleeEnemies.Add(new MeleeEnemy(Content.Load<Texture2D>("Sprites/enemy (2)"), new Vector2(enemy.Key.X * tilesize, enemy.Key.Y * tilesize), new Vector2(75, 75), Color.White, Window, 1));
                 if (enemy.Value % collisionrow == 1)
                     RangedEnemies.Add(new RangedEnemy(Content.Load<Texture2D>("Sprites/rangeenemy"), new Vector2(enemy.Key.X * tilesize, enemy.Key.Y * tilesize), new Vector2(75, 75), Color.White, Window, -1, RangedEnemyProjectile));
             }

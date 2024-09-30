@@ -156,7 +156,7 @@ namespace Mooshika.Scripts
         {
             //SpriteBatch.Draw(Texture, Rectangle, Rectangle, Color, 0, Vector2.Zero, SpriteEffects.None, 0);
             //SpriteBatch.Draw(Texture, new Rectangle((int)Position.X - (int)campos.X, (int)Position.Y - (int)campos.Y, Rectangle.Width, Rectangle.Height), new Rectangle(0,0,(int)Scale.X,(int)Scale.Y), Color, 0, Vector2.Zero, (Direction == 1)? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-            SpriteBatch.Draw(Texture, new Rectangle((int)Position.X - (int)campos.X, (int)Position.Y - (int)campos.Y, Rectangle.Width, Rectangle.Height), new Rectangle(0, 0, 640, 640), Color, 0, Vector2.Zero, (Direction != 1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+            SpriteBatch.Draw(Texture, new Rectangle((int)Position.X - (int)campos.X, (int)Position.Y - (int)campos.Y, Rectangle.Width, Rectangle.Height), new Rectangle(0, 0, 54, 59), Color, 0, Vector2.Zero, (Direction != 1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 
         }
         public void PlayerAttacked(Player Player)
