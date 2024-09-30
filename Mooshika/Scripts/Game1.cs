@@ -51,6 +51,9 @@ namespace Mooshika.Scripts
             TileMap = LoadMap("../../../Map Data/untitled_Tile Layer 1.csv");
             CollisionMap = LoadMap("../../../Map Data/untitled_collision.csv");
             EnemyMap = LoadMap("../../../Map Data/untitled_enemy.csv");
+            /*TileMap = LoadMap("Map Data/untitled_Tile Layer 1.csv");
+            CollisionMap = LoadMap("Map Data/untitled_collision.csv");
+            EnemyMap = LoadMap("Map Data/untitled_enemy.csv");*/
             tilesize = tilesize * scalesize;
 
         }
