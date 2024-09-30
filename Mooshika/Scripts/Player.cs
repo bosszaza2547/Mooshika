@@ -507,7 +507,7 @@ namespace Mooshika.Scripts
             {
                 if (InvincibleTime <= 0 && state != "dashing")
                 {
-                    if (Rectangle.Intersects(meleeenemy.Rectangle))
+                    if (hitbox.Intersects(meleeenemy.Rectangle))
                     {
                         KnockbackTime = KnockbackTimer;
                         InvincibleTime = InvincibleTimer;

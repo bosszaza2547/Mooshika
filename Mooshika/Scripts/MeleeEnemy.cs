@@ -19,6 +19,8 @@ namespace Mooshika.Scripts
         public int Speed = 5;
         public int FloorHeight = 20;
         public int Damage = 10;
+        public float cannotattacktime = 0f;
+        public float cannotattacktimer = 1f;
         bool CanMove = false;
         Vector2 campos;
         public MeleeEnemy (Texture2D texture, Vector2 position, Vector2 scale, Color color, GameWindow window, int direction) : base (texture, position, scale, color, window) 
@@ -164,6 +166,7 @@ namespace Mooshika.Scripts
             if (Rectangle.Intersects(Player.AttackRectangle) && !attacked && Player.attackactive)
             {
                 KnockbackTime = KnockbackTimer;
+                cannotattacktime = cannotattacktimer;
                 attacked = true;
                 Health -= Player.Damage;
                 CanMove = false;
@@ -176,6 +179,7 @@ namespace Mooshika.Scripts
             else if (Rectangle.Intersects(Player.AttackRectangle2) && !attacked && Player.attackactive)
             {
                 KnockbackTime = KnockbackTimer;
+                cannotattacktime = cannotattacktimer;
                 attacked = true;
                 Health -= Player.Damage;
                 CanMove = false;
@@ -188,6 +192,7 @@ namespace Mooshika.Scripts
             else if (Rectangle.Intersects(Player.AttackRectangle3) && !attacked && Player.attackactive)
             {
                 KnockbackTime = KnockbackTimer;
+                cannotattacktime = cannotattacktimer;
                 attacked = true;
                 Health -= Player.Damage;
                 CanMove = false;
