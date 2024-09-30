@@ -10,14 +10,14 @@ namespace Mooshika.Scripts
         public int Health ;
         public int MaxHealth ;
         public Vector2 Velocity;
-        public List<Wall> Walls = new List<Wall>();
-        public List<Platform> Platforms = new List<Platform>();
+        public List<Rectangle> Tiles = new List<Rectangle>();
+        public List<Rectangle> Platforms = new List<Rectangle>();
         public Enemy (Texture2D texture, Vector2 position, Vector2 scale, Color color, GameWindow window) : base (texture, position, scale, color, window) 
         {
         }
-        public void GetList(List<Wall> walls,List<Platform> platforms)
+        public void GetList(List<Rectangle> walls,List<Rectangle> platforms)
         {
-            Walls = walls;
+            Tiles = walls;
             Platforms = platforms;
         }
     }

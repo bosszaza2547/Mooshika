@@ -18,5 +18,9 @@ namespace Mooshika.Scripts
             Position.X += Direction * speed;
             lifespan -= (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
+        public virtual void Draw(SpriteBatch SpriteBatch, Vector2 campos)
+        {
+            SpriteBatch.Draw(Texture, new Rectangle(Rectangle.X - (int)campos.X, Rectangle.Y - (int)campos.Y,Rectangle.Width,Rectangle.Height), Color);
+        }
     }
 }
