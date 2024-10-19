@@ -72,6 +72,7 @@ namespace Mooshika.Scripts
         public float maxdashtimer = 0.2f;
         public float dashcooldown = 0;
         public float dashcooldowntime = 0.3f;
+        public bool LockCamera = false;
 
         public Vector2 campos;
         public Player (Texture2D texture, Vector2 position, Vector2 scale, Color color, GameWindow window,Texture2D pixel) : base (texture, position, scale, color, window) 
@@ -788,13 +789,12 @@ namespace Mooshika.Scripts
         }
         public override void Draw(SpriteBatch SpriteBatch)
         {
-            
+
             //SpriteBatch.Draw(Texture, Rectangle, Rectangle, Color, 0, Vector2.Zero, SpriteEffects.None, 0);
             //SpriteBatch.Draw(Texture, Position, new Rectangle(0, 0, (int)Scale.X, (int)Scale.Y), Color, 0, Vector2.Zero, 1, (Direction == 1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             //SpriteBatch.Draw(pixel, AttackCombo == 1 ? new Rectangle(AttackRectangle.X - (int)campos.X, AttackRectangle.Y - (int)campos.Y, AttackRectangle.Width, AttackRectangle.Height) : (AttackCombo == 2 ? new Rectangle(AttackRectangle2.X - (int)campos.X, AttackRectangle2.Y - (int)campos.Y, AttackRectangle2.Width, AttackRectangle2.Height) : new Rectangle(AttackRectangle3.X - (int)campos.X, AttackRectangle3.Y - (int)campos.Y, AttackRectangle3.Width, AttackRectangle3.Height)), AttackCombo == 1 ? new Rectangle(AttackRectangle.X - (int)campos.X, AttackRectangle.Y - (int)campos.Y, AttackRectangle.Width, AttackRectangle.Height) : (AttackCombo == 2 ? new Rectangle(AttackRectangle2.X - (int)campos.X, AttackRectangle2.Y - (int)campos.Y, AttackRectangle2.Width, AttackRectangle2.Height) : new Rectangle(AttackRectangle3.X - (int)campos.X, AttackRectangle3.Y - (int)campos.Y, AttackRectangle3.Width, AttackRectangle3.Height)), attackactive ? Color.Red : Color.Green, 0, Vector2.Zero, SpriteEffects.None, 0);
             SpriteBatch.Draw(Texture, (state == "attacking" && Direction == 1)? new Rectangle((int)Position.X-32*scale - (int)campos.X, (int)Position.Y - (int)campos.Y, Rectangle.Width, Rectangle.Height) : new Rectangle((int)Position.X - (int)campos.X, (int)Position.Y - (int)campos.Y, Rectangle.Width,Rectangle.Height), new Rectangle (frame* (int)framesize.X, row* (int)framesize.Y, (int)framesize.X, (int)framesize.Y), Color, 0, Vector2.Zero, (state != "attacking") ? SpriteEffects.None : (Direction == 1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-            
         }
-        
+
     }
 }

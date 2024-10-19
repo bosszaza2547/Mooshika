@@ -12,33 +12,12 @@ namespace Mooshika.Scripts
     {
         private GraphicsDeviceManager Graphics;
         private SpriteBatch SpriteBatch;
-
-        Texture2D BackGround;
         Texture2D pixel;
-        Texture2D Health;
-        SpriteFont Font;
-
-        Player Player;
-        Vector2 campos;
-
-        List<MeleeEnemy> MeleeEnemies = new List<MeleeEnemy>();
-        List<RangedEnemy> RangedEnemies = new List<RangedEnemy>();
-        Texture2D RangedEnemyProjectile;
-
-
-        Dictionary<Vector2, int> TileMap;
-        Dictionary<Vector2, int> CollisionMap;
-        Dictionary<Vector2, int> EnemyMap;
-
-        Texture2D Tile;
-        Texture2D CollisionTile;
-
-        
-        int scalesize = 2;
-        int tilesize = 40;
-
-        List<Rectangle> Tiles = new List<Rectangle>();
-        List<Rectangle> Platforms = new List<Rectangle>();
+        StageTest StageTest = new StageTest();
+        TitleScreen TitleScreen = new TitleScreen();
+        Map Map = new Map();
+        String Scene = "Title Screen";
+        String PreviousScene;
         public Game1()
         {
             Graphics = new GraphicsDeviceManager(this);
@@ -46,38 +25,26 @@ namespace Mooshika.Scripts
             IsMouseVisible = true;
             Graphics.PreferredBackBufferWidth = 1280;
             Graphics.PreferredBackBufferHeight = 720;
-            Window.AllowUserResizing = false;
-
-            TileMap = LoadMap("../../../Map Data/untitled_Tile Layer 1.csv");
-            CollisionMap = LoadMap("../../../Map Data/untitled_collision.csv");
-            EnemyMap = LoadMap("../../../Map Data/untitled_enemy.csv");
-            /*TileMap = LoadMap("Map Data/untitled_Tile Layer 1.csv");
-            CollisionMap = LoadMap("Map Data/untitled_collision.csv");
-            EnemyMap = LoadMap("Map Data/untitled_enemy.csv");*/
-            tilesize = tilesize * scalesize;
-
+            Window.AllowUserResizing = true;
+            
         }
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Font = Content.Load<SpriteFont>("Fonts/Font");
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             pixel = new Texture2D(GraphicsDevice, 1, 1);
             pixel.SetData(new[] { Color.White });
-            BackGround = Content.Load<Texture2D>("Sprites/bggg");
-            Health = Content.Load<Texture2D>("Sprites/PlayerHealthBar");
 
-            Player = new Player(Content.Load<Texture2D>("Sprites/Player_SpriteSheet"), new Vector2(200, 200), new Vector2(48*scalesize, 32*scalesize), Color.White, Window, pixel);
-
+            TitleScreen.LoadContent(Content);
             /*Walls.Add(new Wall(pixel, new Vector2(-50, Window.ClientBounds.Height - 20 - 300), new Vector2(100, 300), Color.DarkGreen, Window));
             Walls.Add(new Wall(pixel, new Vector2(Window.ClientBounds.Width - 70 - 100, Window.ClientBounds.Height - 20 - 300), new Vector2(100, 300), Color.DarkGreen, Window));
             Walls.Add(new Wall(pixel, new Vector2(Window.ClientBounds.Width - 70 - 70 - 100, Window.ClientBounds.Height - 20 - 75 - 20 - 100), new Vector2(200, 20), Color.DarkGreen, Window));
@@ -93,58 +60,65 @@ namespace Mooshika.Scripts
 
             RangedEnemyProjectile = Content.Load<Texture2D>("Sprites/rangeenemyprojectile");
             RangedEnemies.Add(new RangedEnemy(Content.Load<Texture2D>("Sprites/rangeenemy"), new Vector2(900, 0), new Vector2(75, 75), Color.White, Window, -1, RangedEnemyProjectile));*/
-            RangedEnemyProjectile = Content.Load<Texture2D>("Sprites/rangeenemyprojectile");
 
 
-            Tile = Content.Load<Texture2D>("TileMap/Tile");
-            CollisionTile = Content.Load<Texture2D>("TileMap/tilecollision");
-            int collisionrow = 2;
-            foreach (var item in CollisionMap)
-            {
-                Rectangle rectangle = new Rectangle((int)item.Key.X * tilesize, (int)item.Key.Y * tilesize, tilesize, tilesize);
-                if (item.Value % collisionrow == 0)
-                Tiles.Add(rectangle);
-                if (item.Value % collisionrow == 1)
-                Platforms.Add(rectangle);
-            }
-            foreach (var enemy in EnemyMap)
-            {
-                Rectangle rectangle = new Rectangle((int)enemy.Key.X * tilesize, (int)enemy.Key.Y * tilesize, tilesize, tilesize);
-                if (enemy.Value % collisionrow == 0)
-                    MeleeEnemies.Add(new MeleeEnemy(Content.Load<Texture2D>("Sprites/enemy (2)"), new Vector2(enemy.Key.X * tilesize, enemy.Key.Y * tilesize), new Vector2(75, 75), Color.White, Window, 1));
-                if (enemy.Value % collisionrow == 1)
-                    RangedEnemies.Add(new RangedEnemy(Content.Load<Texture2D>("Sprites/rangeenemy"), new Vector2(enemy.Key.X * tilesize, enemy.Key.Y * tilesize), new Vector2(75, 75), Color.White, Window, -1, RangedEnemyProjectile));
-            }
             // TODO: use this.Content to load your game content here
 
         }
 
         protected override void Update(GameTime gameTime)
         {
-            
-            float DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            Player.Update(gameTime,campos,Tiles,Platforms, MeleeEnemies, RangedEnemies);
-            if (Player.Position.X - Window.ClientBounds.Width / 2 > 0 && Player.Position.X - Window.ClientBounds.Width / 2 < 1120)
-                campos.X = Player.Position.X - Window.ClientBounds.Width / 2 ;
-            //if (Player.Position.Y+Player.hitbox.Height/2 - Window.ClientBounds.Height / 2 < -80 && Player.Position.Y + Player.hitbox.Height / 2 - Window.ClientBounds.Height / 2 > 800)
-            if(Player.Position.Y - Window.ClientBounds.Height/2 > -60 && Player.Position.Y - Window.ClientBounds.Height /2 < 840)    
-                campos.Y = Player.Position.Y - Window.ClientBounds.Height / 2;
-            //Player.Update(gameTime, Walls, Platforms, MeleeEnemies, RangedEnemies);
-            Debug.Write(Window.ClientBounds.Height / 2);
-            Debug.WriteLine(Player.Position.Y - Window.ClientBounds.Height / 2);
-            foreach (var MeleeEnemy in MeleeEnemies)
+            
+            switch (Scene)
             {
-                MeleeEnemy.Update(gameTime, Player, Tiles, Platforms, campos);
+                case "Title Screen":
+                    {
+                        if (PreviousScene != Scene) 
+                        { 
+                            PreviousScene = Scene;
+                            TitleScreen.Scene = "Title Screen";
+                        }
+                        else
+                        {
+                            TitleScreen.Update(gameTime, this);
+                            Scene = TitleScreen.Scene;
+                        }
+                        break;
+                    }
+                case "Map":
+                    {
+                        if (PreviousScene != Scene)
+                        {
+                            PreviousScene = Scene;
+                            Map.Scene = "Map";
+                            Map.LoadContent(Content);
+                        }
+                        else
+                        {
+                            Map.Update(gameTime, this);
+                            Scene = Map.Scene;
+                        }
+                        break;
+                    }
+                case "Stage Test":
+                    {
+                        if (PreviousScene != Scene)
+                        {
+                            StageTest.LoadContent(Content, Window, pixel);
+                            PreviousScene = Scene;
+                        }
+                        else 
+                        {
+                            StageTest.Update(gameTime, Window);
+                            Scene = StageTest.Scene;
+                        }
+                        
+                        //Scene = StageTest.Scene;
+                        break;
+                    }
             }
-            foreach (var RangedEnemy in RangedEnemies)
-            {
-                RangedEnemy.Update(gameTime, Player, Tiles, Platforms, campos);
-            }
-            MeleeEnemies.RemoveAll((Enemy) => Enemy.Health <= 0);
-            RangedEnemies.RemoveAll((Enemy) => Enemy.Health <= 0);
-
             // TODO: Add your update logic here
             //intersections = getIntersectingTilesHorizontal(Player.Rectangle);
 
@@ -211,8 +185,27 @@ namespace Mooshika.Scripts
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
-            SpriteBatch.Draw(BackGround, new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.White);
+            if (PreviousScene == Scene)
+            {
+                switch (Scene)
+                {
+                    case "Title Screen":
+                        {
+                            TitleScreen.Draw(SpriteBatch, Window);
+                            break;
+                        }
+                    case "Map":
+                        {
+                            Map.Draw(SpriteBatch, Window);
+                            break;
+                        }
+                    case "Stage Test":
+                        {
+                            StageTest.Draw(SpriteBatch, Window, pixel);
+                            break;
+                        }
+                }
+            }
             //SpriteBatch.Draw(BackGround,Vector2.Zero,new Rectangle (0,0,Window.ClientBounds.Width,Window.ClientBounds.Height),Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
             /*foreach (var Wall in Walls)
             {
@@ -222,36 +215,11 @@ namespace Mooshika.Scripts
             {
                 Platform.Draw(SpriteBatch);
             }*/
-            foreach (var MeleeEnemy in MeleeEnemies)
-            {
-                MeleeEnemy.Draw(SpriteBatch);
-            }
-            foreach (var RangedEnemy in RangedEnemies)
-            {
-                RangedEnemy.Draw(SpriteBatch);
-            }
-
-
-
-            Player.Draw(SpriteBatch);
+            
             //SpriteBatch.DrawString(Font, "Health : " + Player.Health, Vector2.Zero, Color.White);
 
             
-            int tilesize = 40*scalesize;
-            int tilerow = 3;
-            int tilepixel = 40;
-
-            foreach (var item in TileMap)
-            {
-                Rectangle rectangle = new Rectangle((int)item.Key.X * tilesize - (int)campos.X, (int)item.Key.Y * tilesize - (int)campos.Y, tilesize, tilesize);
-
-                int x = item.Value % tilerow;
-                int y = item.Value / tilerow;
-
-                Rectangle sourcerectangle = new Rectangle(x * tilepixel, y * tilepixel, tilepixel, tilepixel);
-
-                SpriteBatch.Draw(Tile, rectangle, sourcerectangle, Color.White);
-            }
+            
 
             /*tilerow = 2;
             foreach (var item in CollisionMap)
@@ -280,8 +248,7 @@ namespace Mooshika.Scripts
                 );
 
             }*/
-            SpriteBatch.Draw(pixel, new Vector2(132, 72), new Rectangle(0, 0, Player.Health * 300 / 60, 18), Color.DarkRed);
-            SpriteBatch.Draw(Health, Vector2.Zero, new Rectangle(0,0,151,57), Color.White,0,Vector2.Zero,3f,SpriteEffects.None,1);
+            
             
 
             SpriteBatch.End();
@@ -290,32 +257,7 @@ namespace Mooshika.Scripts
             base.Draw(gameTime);
         }
 
-        Dictionary<Vector2, int> LoadMap(string filepath)
-        {
-            Dictionary<Vector2, int> result = new();
-
-            StreamReader reader = new(filepath);
-
-            int y = 0;
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                string[] items = line.Split(',');
-
-                for (int x = 0; x < items.Length; x++)
-                {
-                    if (int.TryParse(items[x], out int value))
-                    {
-                        if (value > -1)
-                        {
-                            result[new Vector2(x, y)] = value;
-                        }
-                    }
-                }
-                y++;
-            }
-            return result;
-        }
+        
 
         /*public List<Rectangle> getIntersectingTilesHorizontal (Rectangle target)
         {
