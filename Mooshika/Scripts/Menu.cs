@@ -41,7 +41,7 @@ namespace Mooshika.Scripts
             Scene = PreScene;
             if (KeyboardState.IsKeyDown(Keys.Escape) && !KeyboardState2.IsKeyDown(Keys.Escape))
             {
-                Debug.WriteLine("real");
+                //Debug.WriteLine("real");
                 menu = false;
             }
             mouserectangle = new Rectangle((int)((mouseState.Position.X - Offset.X) / Scale), (int)((mouseState.Position.Y - Offset.Y) / Scale), 1, 1);
@@ -83,7 +83,7 @@ namespace Mooshika.Scripts
                     volumerec.Width = 56;*/
             }
             volume = volumerec.Width / 56f;
-            Debug.WriteLine(volume);
+            //Debug.WriteLine(volume);
         }
         public void Draw(SpriteBatch spriteBatch, GameWindow Window,Texture2D pixel)
         {

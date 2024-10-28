@@ -176,7 +176,7 @@ namespace Mooshika.Scripts
                 else { spikeactive = true; }
             }
             
-            Debug.WriteLine(Health);
+            //Debug.WriteLine(Health);
             prestate = state;
 
         }

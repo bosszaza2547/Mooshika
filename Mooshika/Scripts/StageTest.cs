@@ -66,13 +66,14 @@ namespace Mooshika.Scripts
             Scene = "Stage Test";
             scalesize = 1;
             tilesize = 40;
-            TileMap = LoadMap("../../../Map Data/TileMapTest_Tile.csv");
+            /*TileMap = LoadMap("../../../Map Data/TileMapTest_Tile.csv");
             CollisionMap = LoadMap("../../../Map Data/TileMapTest_Collision.csv");
             EnemyMap = LoadMap("../../../Map Data/TileMapTest_Enemy.csv");
-            ItemsMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Items.csv");
-            /*TileMap = LoadMap("Map Data/untitled_Tile Layer 1.csv");
-            CollisionMap = LoadMap("Map Data/untitled_collision.csv");
-            EnemyMap = LoadMap("Map Data/untitled_enemy.csv");*/
+            ItemsMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Items.csv");*/
+            TileMap = LoadMap("Map Data/TileMapTest_Tile.csv");
+            CollisionMap = LoadMap("Map Data/TileMapTest_Collision.csv");
+            EnemyMap = LoadMap("Map Data/TileMapTest_Enemy.csv");
+            ItemsMap = LoadMap("Map Data/Platform_Stage_Prayanak_Items.csv");
             tilesize = tilesize * scalesize;
             MeleeEnemies = new List<MeleeEnemy>();
             RangedEnemies = new List<RangedEnemy>();
@@ -136,12 +137,22 @@ namespace Mooshika.Scripts
             Player.Update(gameTime, campos, Tiles, Platforms, MeleeEnemies, RangedEnemies,Items);
             if (!Player.LockCamera)
             {
-                campos.X = Player.Position.X - 480 / 2;
-                campos.Y = Player.Position.Y - 270 / 2;
+                if (Player.Position.X > 240 && Player.Position.X < 2160)
+                    campos.X = Player.Position.X - 480 / 2;
+                else if (Player.Position.X < 240)
+                    campos.X = 0;
+                else if (Player.Position.X > 2160)
+                    campos.X = 1920;
+                if (Player.Position.Y > 135 && Player.Position.Y < 665)
+                    campos.Y = Player.Position.Y - 270 / 2;
+                else if (Player.Position.Y < 135)
+                    campos.Y = 0;
+                else if (Player.Position.Y > 665)
+                    campos.Y = 530;
             }
-            
+
             //if (Player.Position.Y+Player.hitbox.Height/2 - Window.ClientBounds.Height / 2 < -80 && Player.Position.Y + Player.hitbox.Height / 2 - Window.ClientBounds.Height / 2 > 800)
-            
+
             //Player.Update(gameTime, Walls, Platforms, MeleeEnemies, RangedEnemies);
             /*Debug.Write(270 / 2);
             Debug.WriteLine(Player.Position.Y - 270 / 2);*/

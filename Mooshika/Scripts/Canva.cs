@@ -43,7 +43,7 @@ namespace Mooshika.Scripts
             {
                 offset = Vector2.Zero;
             }
-            Debug.WriteLine(offset);
+            //Debug.WriteLine(offset);
         }
         public void setscreen()
         {

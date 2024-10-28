@@ -40,7 +40,7 @@ namespace Mooshika.Scripts
         public int MaxJump = 2;
         bool jumped = false;
         public int FloorHeight = 20;
-
+        bool dead = false;
         Texture2D pixel;
         Texture2D AttackSprite;
         public Rectangle AttackRectangle = new Rectangle(0, 0, 20, 32);
@@ -285,8 +285,17 @@ namespace Mooshika.Scripts
             }
             else
             {
-                LockCamera = false;
+                
+                if(!dead)
+                {
+                    dead = true;
+                    Velocity.Y = -10;
+                }
+                LockCamera = true;
             }
+            if (Position.Y > 800)
+                Health = 0;
+            Debug.WriteLine(dead);
             if (Health > MaxHealth) 
             {
                 Health = MaxHealth;
@@ -633,354 +642,398 @@ namespace Mooshika.Scripts
         }
         public void Update(GameTime gameTime, Vector2 campos, List<Rectangle> tiles, List<Rectangle> platforms, List<Rectangle> bossattacks)
         {
-            flash = false;
-            this.campos = campos;
-            attackactive = false;
-            KeyboardState = Keyboard.GetState();
-            float DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            Boosttime -= DeltaTime;
-            if (InvincibleTime > 0)
             {
-                InvincibleTime -= DeltaTime;
-            }
-            if (KnockbackTime > 0)
-            {
-                KnockbackTime -= DeltaTime;
-            }
-            if (CoyoteTime > 0)
-            {
-                CoyoteTime -= DeltaTime;
-            }
-            else if (JumpCount == MaxJump)
-            {
-                JumpCount--;
-            }
-            if (PreJumpTime > 0)
-            {
-                PreJumpTime -= DeltaTime;
-            }
-            Velocity.Y += Gravity * DeltaTime;
+                flash = false;
+                this.campos = campos;
+                attackactive = false;
+                KeyboardState = Keyboard.GetState();
+                float DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Boosttime -= DeltaTime;
+                if (InvincibleTime > 0)
+                {
+                    InvincibleTime -= DeltaTime;
+                }
+                if (KnockbackTime > 0)
+                {
+                    KnockbackTime -= DeltaTime;
+                }
+                if (CoyoteTime > 0)
+                {
+                    CoyoteTime -= DeltaTime;
+                }
+                else if (JumpCount == MaxJump)
+                {
+                    JumpCount--;
+                }
+                if (PreJumpTime > 0)
+                {
+                    PreJumpTime -= DeltaTime;
+                }
+                Velocity.Y += Gravity * DeltaTime;
 
-            if (KeyboardState.IsKeyDown(Keys.D1) && !PreviousKeyBoardState.IsKeyDown(Keys.D1))
-            {
-                if (Health < MaxHealth)
+                if (KeyboardState.IsKeyDown(Keys.D1) && !PreviousKeyBoardState.IsKeyDown(Keys.D1))
                 {
-                    if (potion1 > 0)
+                    if (Health < MaxHealth)
                     {
-                        potion1--;
-                        Health += healpower;
-                    }
-                }
-            }
-            if (KeyboardState.IsKeyDown(Keys.D2) && !PreviousKeyBoardState.IsKeyDown(Keys.D2))
-            {
-                if (potion2 > 0)
-                {
-                    potion2--;
-                    Boosttime = 30;
-                }
-            }
-
-            if (KnockbackTime <= 0)
-            {
-                if (KeyboardState.IsKeyDown(Keys.D) && state != "dashing" && state != "attacking" && state != "jumping")
-                {
-                    Velocity.X += Speed * DeltaTime;
-                    Direction = -1;
-                    if (state != "running" && !Attacking)
-                    {
-                        state = "running";
-                    }
-                }
-                else if (KeyboardState.IsKeyDown(Keys.A) && state != "dashing" && state != "attacking" && state != "jumping")
-                {
-                    Velocity.X -= Speed * DeltaTime;
-                    Direction = 1;
-                    if (state != "running" && !Attacking && state != "dashing")
-                    {
-                        state = "running";
-                    }
-                }
-                else
-                {
-                    if (state == "attacking")
-                    {
-                        Velocity.X *= 0.85f;
-                    }
-                    else if (state != "dashing")
-                    {
-                        Velocity.X *= 0.75f;
-                    }
-                    if (state != "idle" && !Attacking && state != "dashing" && state != "jumping")
-                    {
-                        frametimer = 0;
-                        state = "idle";
-                    }
-
-                    /*if (CanJump)
-                    {
-                        if (state != "idle" && !Attacking && state != "dashing")
+                        if (potion1 > 0)
                         {
-                            if (state == "attacking")
+                            potion1--;
+                            Health += healpower;
+                        }
+                    }
+                }
+                if (KeyboardState.IsKeyDown(Keys.D2) && !PreviousKeyBoardState.IsKeyDown(Keys.D2))
+                {
+                    if (potion2 > 0)
+                    {
+                        potion2--;
+                        Boosttime = 30;
+                    }
+                }
+
+                if (KnockbackTime <= 0)
+                {
+                    if (KeyboardState.IsKeyDown(Keys.D) && state != "dashing" && state != "attacking" && state != "jumping")
+                    {
+                        Velocity.X += Speed * DeltaTime;
+                        Direction = -1;
+                        if (state != "running" && !Attacking)
+                        {
+                            state = "running";
+                        }
+                    }
+                    else if (KeyboardState.IsKeyDown(Keys.A) && state != "dashing" && state != "attacking" && state != "jumping")
+                    {
+                        Velocity.X -= Speed * DeltaTime;
+                        Direction = 1;
+                        if (state != "running" && !Attacking && state != "dashing")
+                        {
+                            state = "running";
+                        }
+                    }
+                    else
+                    {
+                        if (state == "attacking")
+                        {
+                            Velocity.X *= 0.85f;
+                        }
+                        else if (state != "dashing")
+                        {
+                            Velocity.X *= 0.75f;
+                        }
+                        if (state != "idle" && !Attacking && state != "dashing" && state != "jumping")
+                        {
+                            frametimer = 0;
+                            state = "idle";
+                        }
+
+                        /*if (CanJump)
+                        {
+                            if (state != "idle" && !Attacking && state != "dashing")
                             {
-                            *//*if (Direction == 1)
-                                Position.X += 32*scale;*//*
+                                if (state == "attacking")
+                                {
+                                *//*if (Direction == 1)
+                                    Position.X += 32*scale;*//*
+                                }
+
+
+                                state = "idle";
+                                frame = 0;
+                                frametimer = 0;
                             }
 
-                         
-                            state = "idle";
+                        }
+                        else
+                        {
+                            state = "jumping";
                             frame = 0;
                             frametimer = 0;
-                        }
-                        
+                        }*/
                     }
-                    else
+                }
+                if (KeyboardState.IsKeyDown(Keys.LeftShift) && !PreviousKeyBoardState.IsKeyDown(Keys.LeftShift) && candash)
+                {
+                    if (state != "dashing" && !Attacking)
                     {
-                        state = "jumping";
-                        frame = 0;
-                        frametimer = 0;
-                    }*/
+                        Velocity.X = dashspeed * -Direction;
+                        state = "dashing";
+                    }
                 }
-            }
-            if (KeyboardState.IsKeyDown(Keys.LeftShift) && !PreviousKeyBoardState.IsKeyDown(Keys.LeftShift) && candash)
-            {
-                if (state != "dashing" && !Attacking)
+                /*if (KeyboardState.IsKeyDown(Keys.W))
+               {
+                   Velocity.Y -= Speed * DeltaTime;
+               }
+               else if (KeyboardState.IsKeyDown(Keys.S))
+               {
+                   Velocity.Y += Speed * DeltaTime;
+               }
+               else Velocity.Y *= 0.75f; */
+                if (state != "dashing")
                 {
-                    Velocity.X = dashspeed * -Direction;
-                    state = "dashing";
+                    if (Boosttime > 0)
+                        Velocity.X = Math.Max(-MaxSpeed - SpeedBoost, Math.Min(MaxSpeed + SpeedBoost, Velocity.X));
+                    else
+                        Velocity.X = Math.Max(-MaxSpeed, Math.Min(MaxSpeed, Velocity.X));
                 }
-            }
-            /*if (KeyboardState.IsKeyDown(Keys.W))
-           {
-               Velocity.Y -= Speed * DeltaTime;
-           }
-           else if (KeyboardState.IsKeyDown(Keys.S))
-           {
-               Velocity.Y += Speed * DeltaTime;
-           }
-           else Velocity.Y *= 0.75f; */
-            if (state != "dashing")
-            {
-                if (Boosttime > 0)
-                    Velocity.X = Math.Max(-MaxSpeed - SpeedBoost, Math.Min(MaxSpeed + SpeedBoost, Velocity.X));
+                /*Velocity.Y = Math.Max(-MaxSpeed, Math.Min(MaxSpeed, Velocity.Y)); */
+                if ((KeyboardState.IsKeyDown(Keys.Space) && PreviousKeyBoardState.IsKeyDown(Keys.Space) != KeyboardState.IsKeyDown(Keys.Space)) || (KeyboardState.IsKeyDown(Keys.W) && PreviousKeyBoardState.IsKeyDown(Keys.W) != KeyboardState.IsKeyDown(Keys.W)) && KnockbackTime <= 0)
+                {
+                    PreJumpTime = PreJumpTimer;
+                    jumped = false;
+                }
+                if (JumpCount > 0 && CanJump && PreJumpTime > 0 && !jumped && KnockbackTime <= 0)
+                {
+                    Velocity.Y = -JumpPower * DeltaTime;
+                    JumpCount--;
+                    jumped = true;
+                }
+                Velocity.Y = Math.Min(Velocity.Y, MaxGravity);
+
+                if (state == "dashing")
+                {
+
+                    Velocity.Y = 0;
+                    dashtimer += DeltaTime;
+                    if (dashtimer > maxdashtimer)
+                    {
+                        dashtimer = 0;
+                        state = "running";
+                        dashcooldown = 0;
+                        candash = false;
+                    }
+                }
+                if (dashcooldown < dashcooldowntime)
+                {
+                    dashcooldown += DeltaTime;
+                }
                 else
-                    Velocity.X = Math.Max(-MaxSpeed, Math.Min(MaxSpeed, Velocity.X));
-            }
-            /*Velocity.Y = Math.Max(-MaxSpeed, Math.Min(MaxSpeed, Velocity.Y)); */
-            if ((KeyboardState.IsKeyDown(Keys.Space) && PreviousKeyBoardState.IsKeyDown(Keys.Space) != KeyboardState.IsKeyDown(Keys.Space)) || (KeyboardState.IsKeyDown(Keys.W) && PreviousKeyBoardState.IsKeyDown(Keys.W) != KeyboardState.IsKeyDown(Keys.W)) && KnockbackTime <= 0)
-            {
-                PreJumpTime = PreJumpTimer;
-                jumped = false;
-            }
-            if (JumpCount > 0 && CanJump && PreJumpTime > 0 && !jumped && KnockbackTime <= 0)
-            {
-                Velocity.Y = -JumpPower * DeltaTime;
-                JumpCount--;
-                jumped = true;
-            }
-            Velocity.Y = Math.Min(Velocity.Y, MaxGravity);
-
-            if (state == "dashing")
-            {
-
-                Velocity.Y = 0;
-                dashtimer += DeltaTime;
-                if (dashtimer > maxdashtimer)
                 {
-                    dashtimer = 0;
-                    state = "running";
-                    dashcooldown = 0;
-                    candash = false;
+                    candash = true;
                 }
-            }
-            if (dashcooldown < dashcooldowntime)
-            {
-                dashcooldown += DeltaTime;
-            }
-            else
-            {
-                candash = true;
-            }
-            PreviousPosition = Position;
-            Position += new Vector2((int)Velocity.X, (int)Velocity.Y);
-            hitbox = new Rectangle((int)Position.X, (int)Position.Y, hitbox.Width, hitbox.Height);
-            flashsize = new Rectangle((int)campos.X, (int)campos.Y, 480, 270);
-            if (Health > 0)
-            {
-                TileCollision(tiles);
-                PlatformCollision(platforms);
-                if (Position.X < 0) 
+                PreviousPosition = Position;
+                Position += new Vector2((int)Velocity.X, (int)Velocity.Y);
+                hitbox = new Rectangle((int)Position.X, (int)Position.Y, hitbox.Width, hitbox.Height);
+                flashsize = new Rectangle((int)campos.X, (int)campos.Y, 480, 270);
+                if (Health > 0)
                 {
-                    Position.X = 0;
-                    Velocity.X = 0;
+                    TileCollision(tiles);
+                    bossattackscheck(bossattacks);
+                    Debug.WriteLine("real");
                 }
-                else if (Position.X > 448)
+                else
                 {
-                    Position.X = 448;
-                    Velocity.X = 0;
-                }
-                bossattackscheck(bossattacks);
-            }
-            else
-            {
-                LockCamera = false;
-            }
-            if (Health > MaxHealth)
-            {
-                Health = MaxHealth;
-            }
-            if (Mouse.GetState().RightButton == ButtonState.Pressed && CanAttack && !Attacking)
-            {
-                Attacking = true;
-                AttackTime = AttackTimer4;
-                AttackCombo = 4;
-                AttackComboTime = AttackComboTimer;
-            }
-            if (KeyboardState.IsKeyDown(Keys.E) && CanAttack && !Attacking)
-            {
-                Attacking = true;
-                AttackTime = AttackTimer5;
-                AttackCombo = 5;
-                AttackComboTime = AttackComboTimer;
-            }
-            if (KeyboardState.IsKeyDown(Keys.F) && CanAttack && !Attacking)
-            {
-                Attacking = true;
-                AttackTime = AttackTimer6;
-                AttackCombo = 6;
-                AttackComboTime = AttackComboTimer;
-            }
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed && CanAttack && !Attacking)
-            {
-                Attacking = true;
-                if (AttackCombo == 0)
-                    AttackTime = AttackTimer;
-                else if (AttackCombo == 1)
-                    AttackTime = AttackTimer2;
-                else AttackTime = AttackTimer3;
-                AttackCombo += 1;
-                AttackComboTime = AttackComboTimer;
-            }
-            else if (Mouse.GetState().LeftButton == ButtonState.Released && !Attacking && Mouse.GetState().RightButton == ButtonState.Released)
-            {
-                CanAttack = true;
-            }
-            if (AttackTime > 0)
-            {
-                CanAttack = false;
-                AttackTime -= DeltaTime;
-            }
-            else
-            {
-                Attacking = false;
-                if (AttackCombo >= AttackMaxCombo)
+                    if (!dead)
+                    {
+                        dead = true;
+                        Velocity.Y = -10;
+                    }
+                    LockCamera = true;
+                }
+                if (Position.Y > 800)
+                    Health = 0;
+                
+                if (Health > MaxHealth)
+                {
+                    Health = MaxHealth;
+                }
+                if (Mouse.GetState().RightButton == ButtonState.Pressed && CanAttack && !Attacking)
+                {
+                    Attacking = true;
+                    AttackTime = AttackTimer4;
+                    AttackCombo = 4;
+                    AttackComboTime = AttackComboTimer;
+                }
+                if (KeyboardState.IsKeyDown(Keys.E) && CanAttack && !Attacking)
+                {
+                    Attacking = true;
+                    AttackTime = AttackTimer5;
+                    AttackCombo = 5;
+                    AttackComboTime = AttackComboTimer;
+                }
+                if (KeyboardState.IsKeyDown(Keys.F) && CanAttack && !Attacking)
+                {
+                    Attacking = true;
+                    AttackTime = AttackTimer6;
+                    AttackCombo = 6;
+                    AttackComboTime = AttackComboTimer;
+                }
+
+                if (Mouse.GetState().LeftButton == ButtonState.Pressed && CanAttack && !Attacking)
+                {
+                    Attacking = true;
+                    if (AttackCombo == 0)
+                        AttackTime = AttackTimer;
+                    else if (AttackCombo == 1)
+                        AttackTime = AttackTimer2;
+                    else AttackTime = AttackTimer3;
+                    AttackCombo += 1;
+                    AttackComboTime = AttackComboTimer;
+                }
+                else if (Mouse.GetState().LeftButton == ButtonState.Released && !Attacking && Mouse.GetState().RightButton == ButtonState.Released)
+                {
+                    CanAttack = true;
+                }
+                if (AttackTime > 0)
+                {
+                    CanAttack = false;
+                    AttackTime -= DeltaTime;
+                }
+                else
+                {
+                    Attacking = false;
+                    if (AttackCombo >= AttackMaxCombo)
+                        AttackCombo = 0;
+                }
+
+                if (AttackComboTime > 0)
+                    AttackComboTime -= DeltaTime;
+                else
+                {
                     AttackCombo = 0;
-            }
+                    AttackComboTime = 0;
+                }
 
-            if (AttackComboTime > 0)
-                AttackComboTime -= DeltaTime;
-            else
-            {
-                AttackCombo = 0;
-                AttackComboTime = 0;
-            }
-
-            if (Direction != 1)
-                /*AttackPosition.X = Position.X + hitbox.Width;*/
-                AttackPosition.X = Position.X + hitbox.Width;
+                if (Direction != 1)
+                    /*AttackPosition.X = Position.X + hitbox.Width;*/
+                    AttackPosition.X = Position.X + hitbox.Width;
 
 
-            else AttackPosition.X = Position.X - (AttackCombo == 1 ? AttackRectangle : (AttackCombo == 2 ? AttackRectangle2 : AttackRectangle3)).Width;
-            AttackPosition.Y = Position.Y + hitbox.Height / 2 - (AttackCombo == 1 ? AttackRectangle : (AttackCombo == 2 ? AttackRectangle2 : AttackRectangle3)).Height / 2;
-            if (AttackCombo == 1)
-            {
-                Damage = 20;
-            }
-            else if (AttackCombo == 2)
-            {
-                Damage = 30;
-            }
-            else if (AttackCombo == 3)
-            {
-                Damage = 50;
-            }
-            //Debug.WriteLine(AttackTime);
-            /*AttackRectangle.X = (int)AttackPosition.X + ((Direction == 1) ? +30 : -60);
-            AttackRectangle.Y = (int)AttackPosition.Y;
-            AttackRectangle2.X = (int)AttackPosition.X + ((Direction == 1) ? +16 : -8);
-            AttackRectangle2.Y = (int)AttackPosition.Y;
-            AttackRectangle3.X = (int)AttackPosition.X + ((Direction == 1) ? +20 : -20);
-            AttackRectangle3.Y = (int)AttackPosition.Y+2;*/
-            AttackRectangle.X = (int)AttackPosition.X;
-            AttackRectangle.Y = (int)AttackPosition.Y;
-            AttackRectangle2.X = (int)AttackPosition.X;
-            AttackRectangle2.Y = (int)AttackPosition.Y;
-            AttackRectangle3.X = (int)AttackPosition.X;
-            AttackRectangle3.Y = (int)AttackPosition.Y;
-            PreviousKeyBoardState = KeyboardState;
-
-
-            if (state == "idle")
-            {
-                framesize = new Vector2(112, 54);
-                if (JumpCount > 0)
+                else AttackPosition.X = Position.X - (AttackCombo == 1 ? AttackRectangle : (AttackCombo == 2 ? AttackRectangle2 : AttackRectangle3)).Width;
+                AttackPosition.Y = Position.Y + hitbox.Height / 2 - (AttackCombo == 1 ? AttackRectangle : (AttackCombo == 2 ? AttackRectangle2 : AttackRectangle3)).Height / 2;
+                if (AttackCombo == 1)
                 {
-                    maxframe = 4;
-                    maxframetimer = 1f / maxframe;
-                    if (Direction == 1)
+                    Damage = 20;
+                }
+                else if (AttackCombo == 2)
+                {
+                    Damage = 30;
+                }
+                else if (AttackCombo == 3)
+                {
+                    Damage = 50;
+                }
+                //Debug.WriteLine(AttackTime);
+                /*AttackRectangle.X = (int)AttackPosition.X + ((Direction == 1) ? +30 : -60);
+                AttackRectangle.Y = (int)AttackPosition.Y;
+                AttackRectangle2.X = (int)AttackPosition.X + ((Direction == 1) ? +16 : -8);
+                AttackRectangle2.Y = (int)AttackPosition.Y;
+                AttackRectangle3.X = (int)AttackPosition.X + ((Direction == 1) ? +20 : -20);
+                AttackRectangle3.Y = (int)AttackPosition.Y+2;*/
+                AttackRectangle.X = (int)AttackPosition.X;
+                AttackRectangle.Y = (int)AttackPosition.Y;
+                AttackRectangle2.X = (int)AttackPosition.X;
+                AttackRectangle2.Y = (int)AttackPosition.Y;
+                AttackRectangle3.X = (int)AttackPosition.X;
+                AttackRectangle3.Y = (int)AttackPosition.Y;
+                PreviousKeyBoardState = KeyboardState;
+
+
+                if (state == "idle")
+                {
+                    framesize = new Vector2(112, 54);
+                    if (JumpCount > 0)
                     {
-                        row = 0;
+                        maxframe = 4;
+                        maxframetimer = 1f / maxframe;
+                        if (Direction == 1)
+                        {
+                            row = 0;
+                        }
+                        else
+                        {
+                            row = 1;
+                        }
                     }
                     else
                     {
-                        row = 1;
-                    }
-                }
-                else
-                {
-                    if (frame > 2)
-                    {
-                        frame = 2;
-                    }
-                    row = 8;
+                        if (frame > 2)
+                        {
+                            frame = 2;
+                        }
+                        row = 8;
 
-                    maxframe = 2;
-                    maxframetimer = 1f / maxframe;
+                        maxframe = 2;
+                        maxframetimer = 1f / maxframe;
+                    }
                 }
-            }
-            if (state == "running")
-            {
-                framesize = new Vector2(112, 54);
-                if (JumpCount > 0)
+                if (state == "running")
                 {
-                    maxframe = 6;
-                    maxframetimer = 0.5f / maxframe;
-                    if (Direction == 1)
+                    framesize = new Vector2(112, 54);
+                    if (JumpCount > 0)
                     {
-                        row = 2;
+                        maxframe = 6;
+                        maxframetimer = 0.5f / maxframe;
+                        if (Direction == 1)
+                        {
+                            row = 2;
+                        }
+                        else
+                        {
+                            row = 3;
+                        }
                     }
                     else
                     {
-                        row = 3;
-                    }
-                }
-                else
-                {
-                    if (frame > 2)
-                    {
-                        frame = 2;
-                    }
-                    row = 8;
+                        if (frame > 2)
+                        {
+                            frame = 2;
+                        }
+                        row = 8;
 
-                    maxframe = 2;
-                    maxframetimer = 1f / maxframe;
+                        maxframe = 2;
+                        maxframetimer = 1f / maxframe;
+                    }
                 }
-            }
-            if (Attacking == true)
-            {
-                if (state != "attacking")
+                if (Attacking == true)
                 {
+                    if (state != "attacking")
+                    {
+                        if (AttackCombo == 1)
+                        {
+                            row = 4;
+                            maxframe = 4;
+                            maxframetimer = AttackTimer / maxframe;
+                        }
+                        if (AttackCombo == 2)
+                        {
+                            row = 5;
+                            maxframe = 6;
+                            maxframetimer = AttackTimer2 / maxframe;
+                        }
+                        if (AttackCombo == 3)
+                        {
+                            row = 6;
+                            maxframe = 9;
+                            maxframetimer = AttackTimer3 / maxframe;
+                        }
+                        if (AttackCombo == 4)
+                        {
+                            row = 9;
+                            maxframe = 4;
+                            maxframetimer = AttackTimer4 / maxframe;
+                        }
+                        if (AttackCombo == 5)
+                        {
+                            row = 10;
+                            maxframe = 12;
+                            maxframetimer = AttackTimer5 / maxframe;
+                        }
+                        if (AttackCombo == 6)
+                        {
+                            row = 11;
+                            maxframe = 10;
+                            maxframetimer = AttackTimer6 / maxframe;
+                        }
+                        state = "attacking";
+                        /*if (Direction == 1)
+                            Position.X -= 32*scale;*/
+                    }
+                }
+                if (state == "attacking")
+                {
+                    framesize = new Vector2(112, 54);
                     if (AttackCombo == 1)
                     {
                         row = 4;
@@ -1017,157 +1070,114 @@ namespace Mooshika.Scripts
                         maxframe = 10;
                         maxframetimer = AttackTimer6 / maxframe;
                     }
-                    state = "attacking";
-                    /*if (Direction == 1)
-                        Position.X -= 32*scale;*/
                 }
-            }
-            if (state == "attacking")
-            {
-                framesize = new Vector2(112, 54);
-                if (AttackCombo == 1)
+                /*if ( maxframe == 12)
+                */
+                if (frame >= maxframe / 3 && frame < maxframe && AttackCombo == 3 && state == "attacking")
                 {
-                    row = 4;
-                    maxframe = 4;
-                    maxframetimer = AttackTimer / maxframe;
+                    attackactive = true;
                 }
-                if (AttackCombo == 2)
+                if (frame >= maxframe / 3 && frame < maxframe && AttackCombo == 1 && state == "attacking")
                 {
-                    row = 5;
-                    maxframe = 6;
-                    maxframetimer = AttackTimer2 / maxframe;
+                    attackactive = true;
                 }
-                if (AttackCombo == 3)
+                if (frame >= maxframe / 3 && frame < maxframe && AttackCombo == 2 && state == "attacking")
                 {
-                    row = 6;
-                    maxframe = 9;
-                    maxframetimer = AttackTimer3 / maxframe;
+                    attackactive = true;
                 }
-                if (AttackCombo == 4)
+                if (state != "attacking")
                 {
-                    row = 9;
-                    maxframe = 4;
-                    maxframetimer = AttackTimer4 / maxframe;
+                    attackactive = false;
                 }
-                if (AttackCombo == 5)
+                if (AttackTime < 0 && AttackCombo == 4)
                 {
-                    row = 10;
-                    maxframe = 12;
-                    maxframetimer = AttackTimer5 / maxframe;
+                    PlayerProjectile.Add(new PlayerProjectile(Projectile, Position + new Vector2(0, hitbox.Height / 2), new Vector2(9, 9), Color.White, Window, Direction, "normal"));
                 }
-                if (AttackCombo == 6)
+                if (AttackTime < 0 && AttackCombo == 5)
                 {
-                    row = 11;
-                    maxframe = 10;
-                    maxframetimer = AttackTimer6 / maxframe;
+                    PlayerProjectile.Add(new PlayerProjectile(Projectile, Position + new Vector2(0, (hitbox.Height / 2) - 8), new Vector2(32, 32), Color.White, Window, Direction, "special"));
                 }
-            }
-            /*if ( maxframe == 12)
-            */
-            if (frame >= maxframe / 3 && frame < maxframe && AttackCombo == 3 && state == "attacking")
-            {
-                attackactive = true;
-            }
-            if (frame >= maxframe / 3 && frame < maxframe && AttackCombo == 1 && state == "attacking")
-            {
-                attackactive = true;
-            }
-            if (frame >= maxframe / 3 && frame < maxframe && AttackCombo == 2 && state == "attacking")
-            {
-                attackactive = true;
-            }
-            if (state != "attacking")
-            {
-                attackactive = false;
-            }
-            if (AttackTime < 0 && AttackCombo == 4)
-            {
-                PlayerProjectile.Add(new PlayerProjectile(Projectile, Position + new Vector2(0, hitbox.Height / 2), new Vector2(9, 9), Color.White, Window, Direction, "normal"));
-            }
-            if (AttackTime < 0 && AttackCombo == 5)
-            {
-                PlayerProjectile.Add(new PlayerProjectile(Projectile, Position + new Vector2(0, (hitbox.Height / 2) - 8), new Vector2(32, 32), Color.White, Window, Direction, "special"));
-            }
-            if (AttackTime < 0 && AttackCombo == 6)
-            {
-                flash = true;
-            }
-            if (AttackCombo > 3)
-            {
-                attackactive = false;
-            }
-            if (flashvalue <= 1 && AttackCombo == 6 && frame >= 5)
-            {
-                flashvalue += DeltaTime * 10;
-            }
-            else if (flashvalue > 1 && AttackCombo == 6 && frame >= 5)
-            {
-                flashvalue = 1;
-            }
-            else if (flashvalue >= 0)
-            {
-                flashvalue -= DeltaTime * 10;
-            }
-            else
-            {
-                flashvalue = 0;
-            }
-
-
-            foreach (var Projectile in PlayerProjectile)
-            {
-                Projectile.Update(gameTime);
-            }
-            PlayerProjectile.RemoveAll((Projectile) => Projectile.Position.X - campos.X > Window.ClientBounds.Width || Projectile.Position.X - campos.X < 0 - Projectile.Rectangle.Width || Projectile.hit);
-            if (state == "dashing")
-            {
-                framesize = new Vector2(112, 54);
-                if (Direction == 1)
+                if (AttackTime < 0 && AttackCombo == 6)
                 {
-                    row = 7;
+                    flash = true;
+                }
+                if (AttackCombo > 3)
+                {
+                    attackactive = false;
+                }
+                if (flashvalue <= 1 && AttackCombo == 6 && frame >= 5)
+                {
+                    flashvalue += DeltaTime * 10;
+                }
+                else if (flashvalue > 1 && AttackCombo == 6 && frame >= 5)
+                {
+                    flashvalue = 1;
+                }
+                else if (flashvalue >= 0)
+                {
+                    flashvalue -= DeltaTime * 10;
                 }
                 else
                 {
-                    row = 7;
+                    flashvalue = 0;
                 }
 
-                maxframe = 8;
-                maxframetimer = maxdashtimer / maxframe;
-            }
-            if (state == "jumping")
-            {
-                framesize = new Vector2(112, 54);
 
-                row = 8;
-
-                maxframe = 2;
-                maxframetimer = 0.15f;
-            }
-            //Scale = framesize *2;
-            frametimer += DeltaTime;
-
-            if (frametimer > maxframetimer)
-            {
-
-                frametimer = 0;
-
-                frame++;
-                if (frame >= maxframe)
+                foreach (var Projectile in PlayerProjectile)
                 {
-                    if (state != "attacking")
-                    {
-                        frame = 0;
-                    }
-                    else frame = maxframe - 1;
-
+                    Projectile.Update(gameTime);
                 }
+                PlayerProjectile.RemoveAll((Projectile) => Projectile.Position.X - campos.X > Window.ClientBounds.Width || Projectile.Position.X - campos.X < 0 - Projectile.Rectangle.Width || Projectile.hit);
+                if (state == "dashing")
+                {
+                    framesize = new Vector2(112, 54);
+                    if (Direction == 1)
+                    {
+                        row = 7;
+                    }
+                    else
+                    {
+                        row = 7;
+                    }
+
+                    maxframe = 8;
+                    maxframetimer = maxdashtimer / maxframe;
+                }
+                if (state == "jumping")
+                {
+                    framesize = new Vector2(112, 54);
+
+                    row = 8;
+
+                    maxframe = 2;
+                    maxframetimer = 0.15f;
+                }
+                //Scale = framesize *2;
+                frametimer += DeltaTime;
+
+                if (frametimer > maxframetimer)
+                {
+
+                    frametimer = 0;
+
+                    frame++;
+                    if (frame >= maxframe)
+                    {
+                        if (state != "attacking")
+                        {
+                            frame = 0;
+                        }
+                        else frame = maxframe - 1;
+
+                    }
+                }
+                if (prestate != state)
+                {
+                    frame = 0;
+                    frametimer = 0;
+                }
+                prestate = state;
             }
-            if (prestate != state)
-            {
-                frame = 0;
-                frametimer = 0;
-            }
-            prestate = state;
         }
         public void ItemsCollision()
         {

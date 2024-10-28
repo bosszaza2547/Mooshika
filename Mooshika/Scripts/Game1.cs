@@ -120,6 +120,8 @@ namespace Mooshika.Scripts
             StageTest.KeyboardState2 = KeyboardState2;
             BeforePrayanak.KeyboardState = KeyboardState;
             BeforePrayanak.KeyboardState2 = KeyboardState2;
+            TestBoss.KeyboardState = KeyboardState;
+            TestBoss.KeyboardState2 = KeyboardState2;
             /*if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();*/
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
@@ -240,7 +242,8 @@ namespace Mooshika.Scripts
             }
 
             //Debug.WriteLine(Scene);
-            //Debug.WriteLine(menu);
+            //Debug.WriteLine(Scene);
+
             // TODO: Add your update logic here
             //intersections = getIntersectingTilesHorizontal(Player.Rectangle);
 

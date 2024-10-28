@@ -69,10 +69,17 @@ namespace Mooshika.Scripts
             Scene = "TestBoss";
             scalesize = 1;
             tilesize = 40;
-            TileMap = LoadMap("../../../Map Data/TestBoss_Tile.csv");
+            TileMap = LoadMap("Map Data/TestBoss_Tile.csv");
+            CollisionMap = LoadMap("Map Data/TestBoss_Coliision.csv");
+
+            /*TileMap = LoadMap("../../../Map Data/TestBoss_Tile.csv");
+            CollisionMap = LoadMap("../../../Map Data/TestBoss_Coliision.csv");*/
+
+
+
             /*TileMapp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile.csv");
             TileMappp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile2.csv");*/
-            CollisionMap = LoadMap("../../../Map Data/TestBoss_Coliision.csv");
+
             /*ItemsMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Items.csv");
             EnemyMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Enemy.csv");*/
             /*TileMap = LoadMap("Map Data/untitled_Tile Layer 1.csv");
@@ -116,6 +123,7 @@ namespace Mooshika.Scripts
         }
         public void Update(GameTime gameTime , GameWindow Window)
         {
+            //Debug.WriteLine(Player.LockCamera);
             List<Rectangle> bossattacks = new List<Rectangle>();
             if(Elavan.meleeattacking)
             bossattacks.Add(Elavan.Rectangle);

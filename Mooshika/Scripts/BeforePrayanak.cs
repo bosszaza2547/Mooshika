@@ -70,12 +70,20 @@ namespace Mooshika.Scripts
             Scene = "Before Prayanak";
             scalesize = 1;
             tilesize = 40;
-            TileMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Tile.csv");
+            TileMap = LoadMap("Map Data/Platform_Stage_Prayanak_Tile.csv");
+            TileMapp = LoadMap("Map Data/Platform_Stage_Prayanak_DecoTile.csv");
+            TileMappp = LoadMap("Map Data/Platform_Stage_Prayanak_DecoTile2.csv");
+            CollisionMap = LoadMap("Map Data/Platform_Stage_Prayanak_Collision.csv");
+            ItemsMap = LoadMap("Map Data/Platform_Stage_Prayanak_Items.csv");
+            EnemyMap = LoadMap("Map Data/Platform_Stage_Prayanak_Enemy.csv");
+
+            /*TileMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Tile.csv");
             TileMapp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile.csv");
             TileMappp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile2.csv");
             CollisionMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Collision.csv");
             ItemsMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Items.csv");
-            EnemyMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Enemy.csv");
+            EnemyMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Enemy.csv");*/
+
             /*TileMap = LoadMap("Map Data/untitled_Tile Layer 1.csv");
             CollisionMap = LoadMap("Map Data/untitled_collision.csv");
             EnemyMap = LoadMap("Map Data/untitled_enemy.csv");*/
