@@ -12,6 +12,7 @@ namespace Mooshika.Scripts
         public Vector2 Velocity;
         public List<Rectangle> Tiles = new List<Rectangle>();
         public List<Rectangle> Platforms = new List<Rectangle>();
+        public Rectangle cliffcheck = new Rectangle();
         public Enemy (Texture2D texture, Vector2 position, Vector2 scale, Color color, GameWindow window) : base (texture, position, scale, color, window) 
         {
         }

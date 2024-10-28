@@ -6,9 +6,9 @@ namespace Mooshika.Scripts
 {
     internal class RangedEnemyProjectile : Sprite
     {
-        public int speed = 10;
+        public int speed = 4;
         public float lifespan = 3;
-        public int Damage = 10;
+        public int Damage = 5;
         public RangedEnemyProjectile(Texture2D texture, Vector2 pos, Vector2 scale, Color color, GameWindow gameWindow, int Direction) : base (texture, pos, scale, color, gameWindow)
         {
             this.Direction = Direction;

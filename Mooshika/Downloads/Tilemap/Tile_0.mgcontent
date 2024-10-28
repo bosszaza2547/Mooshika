@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>C:/Users/ASUS/Downloads/Tilemap/Tile.tsx</SourceFile>
+  <SourceTime>2024-10-27T20:27:00.2714907+07:00</SourceTime>
+  <DestFile>C:/Users/ASUS/source/repos/Mooshika/Mooshika/Content/bin/DesktopGL/Content/../../../../../Downloads/Tilemap/Tile_0.xnb</DestFile>
+  <DestTime>2024-10-27T20:41:54.311104+07:00</DestTime>
+  <Importer>TiledMapTilesetImporter</Importer>
+  <ImporterTime>2024-09-30T10:14:14+07:00</ImporterTime>
+  <Processor>TiledMapTilesetProcessor</Processor>
+  <ProcessorTime>2024-09-30T10:14:14+07:00</ProcessorTime>
+  <Dependencies />
+  <BuildAsset>
+    <string>C:/Users/ASUS/source/repos/Mooshika/Mooshika/Content/bin/DesktopGL/Content/../../../../../Downloads/Tilemap/Tiles_0.xnb</string>
+  </BuildAsset>
+  <BuildOutput />
+</PipelineBuildEvent>
