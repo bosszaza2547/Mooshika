@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
@@ -13,7 +13,53 @@
   <ItemGroup>
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
+    <None Remove="Map Data\Platform_Stage_Prayanak_Collision.csv" />
+    <None Remove="Map Data\Platform_Stage_Prayanak_DecoTile.csv" />
+    <None Remove="Map Data\Platform_Stage_Prayanak_DecoTile2.csv" />
+    <None Remove="Map Data\Platform_Stage_Prayanak_Enemy.csv" />
+    <None Remove="Map Data\Platform_Stage_Prayanak_Items.csv" />
+    <None Remove="Map Data\Platform_Stage_Prayanak_Tile.csv" />
+    <None Remove="Map Data\TestBoss_Coliision.csv" />
+    <None Remove="Map Data\TestBoss_Tile.csv" />
+    <None Remove="Map Data\TileMapTest_Collision.csv" />
+    <None Remove="Map Data\TileMapTest_Enemy.csv" />
+    <None Remove="Map Data\TileMapTest_Tile.csv" />
     <None Remove="Map Data\untitled_Tile Layer 1.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Map Data\Platform_Stage_Prayanak_Collision.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Prayanak_DecoTile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Prayanak_DecoTile2.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Prayanak_Enemy.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Prayanak_Items.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Prayanak_Tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\TestBoss_Coliision.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\TestBoss_Tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\TileMapTest_Collision.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\TileMapTest_Enemy.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\TileMapTest_Tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
