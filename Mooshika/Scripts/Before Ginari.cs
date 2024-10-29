@@ -15,7 +15,7 @@ using MonoGame.Extended.Tiled.Renderers;
 
 namespace Mooshika.Scripts
 {
-    internal class BeforePrayanak : GameScene
+    internal class BeforeGinari : GameScene
     {
 
         GraphicsDevice GraphicsDevice;
@@ -24,7 +24,7 @@ namespace Mooshika.Scripts
         const int MapHeight = 800;
         
 
-        public String Scene = "Before Prayanak";
+        public String Scene = "Before Ginari";
         Texture2D BackGround;
         
         Texture2D Health;
@@ -32,8 +32,6 @@ namespace Mooshika.Scripts
         SpriteFont Font;
 
         public Player Player;
-        Texture2D tutor, potion;
-        Vector2 tutorpos;
         Vector2 campos;
 
         List<MeleeEnemy> MeleeEnemies = new List<MeleeEnemy>();
@@ -46,7 +44,6 @@ namespace Mooshika.Scripts
 
         Dictionary<Vector2, int> TileMap;
         Dictionary<Vector2, int> TileMapp;
-        Dictionary<Vector2, int> TileMappp;
         Dictionary<Vector2, int> CollisionMap;
         Dictionary<Vector2, int> EnemyMap;
         Dictionary<Vector2, int> ItemsMap;
@@ -56,13 +53,14 @@ namespace Mooshika.Scripts
         Texture2D DecoTile2;
         Texture2D CollisionTile;
 
+        Texture2D tutor, potion;
+        Vector2 tutorpos;
         public KeyboardState KeyboardState, KeyboardState2;
         int scalesize = 1;
         int tilesize = 40;
 
         List<Rectangle> Tiles = new List<Rectangle>();
         List<Rectangle> Platforms = new List<Rectangle>();
-
         public bool menu = false;
         public void LoadContent(ContentManager Content, GameWindow Window, Texture2D pixel, GraphicsDevice graphicsDevice)
         {
@@ -70,15 +68,14 @@ namespace Mooshika.Scripts
             GraphicsDevice = graphicsDevice;
             
 
-            Scene = "Before Prayanak";
+            Scene = "Before Ginari";
             scalesize = 1;
             tilesize = 40;
-            TileMap = LoadMap("Map Data/Platform_Stage_Prayanak_Tile.csv");
-            TileMapp = LoadMap("Map Data/Platform_Stage_Prayanak_DecoTile.csv");
-            TileMappp = LoadMap("Map Data/Platform_Stage_Prayanak_DecoTile2.csv");
-            CollisionMap = LoadMap("Map Data/Platform_Stage_Prayanak_Collision.csv");
-            ItemsMap = LoadMap("Map Data/Platform_Stage_Prayanak_Items.csv");
-            EnemyMap = LoadMap("Map Data/Platform_Stage_Prayanak_Enemy.csv");
+            TileMap = LoadMap("Map Data/Platform_Stage_Ginari_tile.csv");
+            TileMapp = LoadMap("Map Data/Platform_Stage_Ginari_decoration assect.csv");
+            CollisionMap = LoadMap("Map Data/Platform_Stage_Ginari_collision.csv");
+            ItemsMap = LoadMap("Map Data/Platform_Stage_Ginari_item.csv");
+            EnemyMap = LoadMap("Map Data/Platform_Stage_Ginari_enemy.csv");
 
             /*TileMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Tile.csv");
             TileMapp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile.csv");
@@ -129,20 +126,21 @@ namespace Mooshika.Scripts
 
             Font = Content.Load<SpriteFont>("Fonts/Font");
             BackGround = Content.Load<Texture2D>("Sprites/bggg");
-            Health = Content.Load<Texture2D>("Sprites/Skill4");
+            Health = Content.Load<Texture2D>("Sprites/Skill3");
             ItemsIcons = Content.Load<Texture2D>("Sprites/ItemsSlot");
 
             PlayerProjectile = Content.Load<Texture2D>("Sprites/player_S_Atk_EF");
-            Player = new Player(Content.Load<Texture2D>("Sprites/Player_SpriteSheet"), new Vector2(2*40, 14*40), new Vector2(112 * scalesize, 54 * scalesize), Color.White, Window, pixel, PlayerProjectile);
+            Player = new Player(Content.Load<Texture2D>("Sprites/Player_SpriteSheet"), new Vector2(2*40, 16*40), new Vector2(112 * scalesize, 54 * scalesize), Color.White, Window, pixel, PlayerProjectile);
 
-            Player.power = "Flash";
+            Player.power = "Charge Attack";
             campos.X = Player.Position.X - 480 / 2;
 
             Tile = Content.Load<Texture2D>("TileMap/Tiles");
             DecoTile = Content.Load<Texture2D>("TileMap/AssetsForestttt");
             DecoTile2 = Content.Load<Texture2D>("TileMap/stone_platoformmmmmm");
             CollisionTile = Content.Load<Texture2D>("TileMap/tilecollision");
-            tutor = Content.Load<Texture2D>("Sprites/FlashE");
+
+            tutor = Content.Load<Texture2D>("Sprites/ECharge");
             potion = Content.Load<Texture2D>("Sprites/12Items");
             tutorpos = Player.Position + new Vector2(10, 0);
         }
@@ -172,7 +170,7 @@ namespace Mooshika.Scripts
             }
             if (Player.Position.X > 2400)
             {
-                Scene = ("PrayanakBoss");
+                Scene = ("GinariBoss");
             }
             //Debug.WriteLine(campos);
 
@@ -231,17 +229,6 @@ namespace Mooshika.Scripts
                 Rectangle sourcerectangle = new Rectangle(x * tilepixel, y * tilepixel, tilepixel, tilepixel);
                 spriteBatch.Draw(DecoTile, rectangle, sourcerectangle, Color.White);
             }
-            tilerow = 9;
-            foreach (var item in TileMappp)
-            {
-                Rectangle rectangle = new Rectangle((int)item.Key.X * tilesize - (int)campos.X, (int)item.Key.Y * tilesize - (int)campos.Y, tilesize, tilesize);
-
-                int x = item.Value % tilerow;
-                int y = item.Value / tilerow;
-
-                Rectangle sourcerectangle = new Rectangle(x * tilepixel, y * tilepixel, tilepixel, tilepixel);
-                spriteBatch.Draw(DecoTile2, rectangle, sourcerectangle, Color.White);
-            }
             foreach (var MeleeEnemy in MeleeEnemies)
             {
                 MeleeEnemy.Draw(spriteBatch);
@@ -265,9 +252,9 @@ namespace Mooshika.Scripts
             spriteBatch.Draw(ItemsIcons, new Vector2(56,38),Color.White);
             spriteBatch.DrawString(Font, Player.potion1.ToString(), new Vector2(56, 38), Color.White,0,Vector2.Zero,0.25f,SpriteEffects.None,1);
             spriteBatch.DrawString(Font, Player.potion2.ToString(), new Vector2(73, 38), Color.White, 0, Vector2.Zero, 0.25f, SpriteEffects.None, 1);
-
             spriteBatch.Draw(tutor, tutorpos - campos, Color.White);
             spriteBatch.Draw(potion, tutorpos - campos + new Vector2(0, 20), Color.White);
+
             Player.Draw(spriteBatch);
         }
     }

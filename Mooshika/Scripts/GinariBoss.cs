@@ -12,48 +12,51 @@ using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
+using MonoGame.Extended.Timers;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Mooshika.Scripts
 {
-    internal class BeforePrayanak : GameScene
+    internal class GinariBoss : GameScene
     {
 
         GraphicsDevice GraphicsDevice;
         
-        const int MapWidth = 2400;
-        const int MapHeight = 800;
+        const int MapWidth = 480;
+        const int MapHeight = 280;
         
 
-        public String Scene = "Before Prayanak";
+        public String Scene = "GinariBoss";
         Texture2D BackGround;
         
         Texture2D Health;
         Texture2D ItemsIcons;
         SpriteFont Font;
 
+        public MouseState mouseState, mouseState2;
+        SoundEffect hit;
         public Player Player;
-        Texture2D tutor, potion;
-        Vector2 tutorpos;
         Vector2 campos;
 
-        List<MeleeEnemy> MeleeEnemies = new List<MeleeEnemy>();
-        List<RangedEnemy> RangedEnemies = new List<RangedEnemy>();
-        Texture2D RangedEnemyProjectile;
         Texture2D PlayerProjectile;
+        Texture2D Ginaritex;
+        Texture2D Projectile;
+        Ginari Ginari;
+        List<Ginari> Ginaris;
 
         List<Items> Items = new List<Items>();
         Texture2D Item;
 
         Dictionary<Vector2, int> TileMap;
-        Dictionary<Vector2, int> TileMapp;
-        Dictionary<Vector2, int> TileMappp;
+        /*Dictionary<Vector2, int> TileMapp;
+        Dictionary<Vector2, int> TileMappp;*/
         Dictionary<Vector2, int> CollisionMap;
-        Dictionary<Vector2, int> EnemyMap;
-        Dictionary<Vector2, int> ItemsMap;
+        /*Dictionary<Vector2, int> EnemyMap;
+        Dictionary<Vector2, int> ItemsMap;*/
 
         Texture2D Tile;
-        Texture2D DecoTile;
-        Texture2D DecoTile2;
+        /*Texture2D DecoTile;
+        Texture2D DecoTile2;*/
         Texture2D CollisionTile;
 
         public KeyboardState KeyboardState, KeyboardState2;
@@ -62,38 +65,32 @@ namespace Mooshika.Scripts
 
         List<Rectangle> Tiles = new List<Rectangle>();
         List<Rectangle> Platforms = new List<Rectangle>();
-
         public bool menu = false;
         public void LoadContent(ContentManager Content, GameWindow Window, Texture2D pixel, GraphicsDevice graphicsDevice)
         {
-
             GraphicsDevice = graphicsDevice;
-            
+            Ginaris = new List<Ginari>();
 
-            Scene = "Before Prayanak";
+            Scene = "GinariBoss";
             scalesize = 1;
             tilesize = 40;
-            TileMap = LoadMap("Map Data/Platform_Stage_Prayanak_Tile.csv");
-            TileMapp = LoadMap("Map Data/Platform_Stage_Prayanak_DecoTile.csv");
-            TileMappp = LoadMap("Map Data/Platform_Stage_Prayanak_DecoTile2.csv");
-            CollisionMap = LoadMap("Map Data/Platform_Stage_Prayanak_Collision.csv");
-            ItemsMap = LoadMap("Map Data/Platform_Stage_Prayanak_Items.csv");
-            EnemyMap = LoadMap("Map Data/Platform_Stage_Prayanak_Enemy.csv");
+            TileMap = LoadMap("Map Data/BossGinari_Tile.csv");
+            CollisionMap = LoadMap("Map Data/BossGinari_Coliision.csv");
 
-            /*TileMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Tile.csv");
-            TileMapp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile.csv");
-            TileMappp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile2.csv");
-            CollisionMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Collision.csv");
-            ItemsMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Items.csv");
+            /*TileMap = LoadMap("../../../Map Data/TestBoss_Tile.csv");
+            CollisionMap = LoadMap("../../../Map Data/TestBoss_Coliision.csv");*/
+
+
+            hit = Content.Load<SoundEffect>("Sounds/Normal_Atk");
+            /*TileMapp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile.csv");
+            TileMappp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile2.csv");*/
+
+            /*ItemsMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Items.csv");
             EnemyMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Enemy.csv");*/
-
             /*TileMap = LoadMap("Map Data/untitled_Tile Layer 1.csv");
             CollisionMap = LoadMap("Map Data/untitled_collision.csv");
             EnemyMap = LoadMap("Map Data/untitled_enemy.csv");*/
             tilesize = tilesize * scalesize;
-            MeleeEnemies = new List<MeleeEnemy>();
-            RangedEnemies = new List<RangedEnemy>();
-            Items = new List<Items>();
 
 
             int row = 2;
@@ -105,56 +102,49 @@ namespace Mooshika.Scripts
                 if (item.Value % row == 1)
                     Platforms.Add(rectangle);
             }
-            RangedEnemyProjectile = Content.Load<Texture2D>("Sprites/rangeenemyprojectile");
-            row = 3;
-            foreach (var enemy in EnemyMap)
-            {
-                Rectangle rectangle = new Rectangle((int)enemy.Key.X * tilesize, (int)enemy.Key.Y * tilesize, tilesize, tilesize);
-                if (enemy.Value % row == 0)
-                    MeleeEnemies.Add(new MeleeEnemy(Content.Load<Texture2D>("Sprites/monster_walk_sheet"), new Vector2(enemy.Key.X * tilesize, enemy.Key.Y * tilesize), new Vector2(64, 59), Color.White, Window, 1, 1, 100, 1));
-                if (enemy.Value % row == 1)
-                    RangedEnemies.Add(new RangedEnemy(Content.Load<Texture2D>("Sprites/monster_walk_sheet"), new Vector2(enemy.Key.X * tilesize, enemy.Key.Y * tilesize), new Vector2(64, 63), Color.White, Window, -1, RangedEnemyProjectile, 1, 50));
-                if (enemy.Value % row == 2)
-                    MeleeEnemies.Add(new MeleeEnemy(Content.Load<Texture2D>("Sprites/monster_walk_sheet"), new Vector2(enemy.Key.X * tilesize, enemy.Key.Y * tilesize), new Vector2(64, 59), Color.White, Window, 1, 2, 60, 2));
-            }
-            row = 2;
-            foreach (var item in ItemsMap)
-            {
-                Rectangle rectangle = new Rectangle((int)item.Key.X * tilesize, (int)item.Key.Y * tilesize, tilesize, tilesize);
-                if (item.Value % row == 0)
-                    Items.Add(new Items(Content.Load<Texture2D>("Sprites/Items"), new Vector2(item.Key.X * tilesize, item.Key.Y * tilesize), new Vector2(18, 18), Color.White, Window, 1));
-                if (item.Value % row == 1)
-                    Items.Add(new Items(Content.Load<Texture2D>("Sprites/Items"), new Vector2(item.Key.X * tilesize, item.Key.Y * tilesize), new Vector2(18, 18), Color.White, Window, 2));
-            }
+            
+            
 
             Font = Content.Load<SpriteFont>("Fonts/Font");
-            BackGround = Content.Load<Texture2D>("Sprites/bggg");
-            Health = Content.Load<Texture2D>("Sprites/Skill4");
+            BackGround = Content.Load<Texture2D>("Sprites/Background_Sky");
+            Health = Content.Load<Texture2D>("Sprites/Skill3");
             ItemsIcons = Content.Load<Texture2D>("Sprites/ItemsSlot");
-
+            Ginaritex = Content.Load<Texture2D>("Sprites/Ginari_Sheet");
+            Projectile = Content.Load<Texture2D>("Sprites/Boss_4_ATK_EF");
+            Ginaris.Add(new Ginari(Ginaritex, new Vector2(-40, 290 - 40 - 100), new Vector2(125, 100), Color.White, Window, Projectile, 1000, 1, -1));
+            Ginaris.Add(new Ginari(Ginaritex, new Vector2(400, 290 - 40 - 100), new Vector2(125, 100), Color.White, Window, Projectile, 250, 2, 1));
+            Ginaris.Add(new Ginari(Ginaritex, new Vector2(400, 290 - 40 - 100 - 120), new Vector2(125, 100), Color.White, Window, Projectile, 500, 3, 1));
             PlayerProjectile = Content.Load<Texture2D>("Sprites/player_S_Atk_EF");
-            Player = new Player(Content.Load<Texture2D>("Sprites/Player_SpriteSheet"), new Vector2(2*40, 14*40), new Vector2(112 * scalesize, 54 * scalesize), Color.White, Window, pixel, PlayerProjectile);
+            Player = new Player(Content.Load<Texture2D>("Sprites/Player_SpriteSheet"), new Vector2(5*40, 5*40), new Vector2(112 * scalesize, 54 * scalesize), Color.White, Window, pixel, PlayerProjectile);
+            Player.power = "Charge Attack";
 
-            Player.power = "Flash";
             campos.X = Player.Position.X - 480 / 2;
 
             Tile = Content.Load<Texture2D>("TileMap/Tiles");
-            DecoTile = Content.Load<Texture2D>("TileMap/AssetsForestttt");
-            DecoTile2 = Content.Load<Texture2D>("TileMap/stone_platoformmmmmm");
+            /*DecoTile = Content.Load<Texture2D>("TileMap/AssetsForestttt");
+            DecoTile2 = Content.Load<Texture2D>("TileMap/stone_platoformmmmmm");*/
             CollisionTile = Content.Load<Texture2D>("TileMap/tilecollision");
-            tutor = Content.Load<Texture2D>("Sprites/FlashE");
-            potion = Content.Load<Texture2D>("Sprites/12Items");
-            tutorpos = Player.Position + new Vector2(10, 0);
+            Player.LockCamera = true;
+            campos.X = 0;
         }
         public void Update(GameTime gameTime , GameWindow Window)
         {
+            //Debug.WriteLine(Player.LockCamera);
+            List<Rectangle> bossattacks = new List<Rectangle>();
+            foreach(var Ginari in Ginaris)
+            foreach(var projectile in Ginari.GinariProjectiles)
+                    bossattacks.Add(projectile.Rectangle);
+            /*if(Krut.spikeactive) 
+            
+            bossattacks.Add(Krut.flamebox);*/
             if (KeyboardState.IsKeyDown(Keys.Escape) && !KeyboardState2.IsKeyDown(Keys.Escape))
             {
                 menu = true;
             }
             float DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
-            Player.Update(gameTime, campos, Tiles, Platforms, MeleeEnemies, RangedEnemies,Items);
+            if (mouseState.LeftButton == ButtonState.Released && mouseState2.LeftButton != ButtonState.Released)
+                hit.Play();
+            Player.Update(gameTime, campos, Tiles, Platforms,bossattacks);
             if (!Player.LockCamera)
             {
                 if (Player.Position.X > 240 && Player.Position.X < 2160)
@@ -170,9 +160,9 @@ namespace Mooshika.Scripts
                 else if (Player.Position.Y > 665)
                     campos.Y = 530;
             }
-            if (Player.Position.X > 2400)
+            foreach (var Ginari in Ginaris)
             {
-                Scene = ("PrayanakBoss");
+                Ginari.Update(gameTime, Player);
             }
             //Debug.WriteLine(campos);
 
@@ -181,16 +171,6 @@ namespace Mooshika.Scripts
             //Player.Update(gameTime, Walls, Platforms, MeleeEnemies, RangedEnemies);
             /*Debug.Write(270 / 2);
             Debug.WriteLine(Player.Position.Y - 270 / 2);*/
-            foreach (var MeleeEnemy in MeleeEnemies)
-            {
-                MeleeEnemy.Update(gameTime, Player, Tiles, Platforms, campos);
-            }
-            foreach (var RangedEnemy in RangedEnemies)
-            {
-                RangedEnemy.Update(gameTime, Player, Tiles, Platforms, campos);
-            }
-            MeleeEnemies.RemoveAll((Enemy) => Enemy.Health <= 0 && Enemy.Position.Y > 270 + campos.Y);
-            RangedEnemies.RemoveAll((Enemy) => Enemy.Health <= 0 && Enemy.Position.Y > 270 + campos.Y);
             Items.RemoveAll((item) => item.Rectangle.Intersects(Player.hitbox));
             if (KeyboardState.IsKeyDown(Keys.M))
             {
@@ -200,6 +180,11 @@ namespace Mooshika.Scripts
             {
                 Player.LockCamera = !Player.LockCamera;
             }
+            Ginaris.RemoveAll(gin => gin.Health <= 0 && gin.Position.Y > 1000);
+            if (Ginaris.Count == 0)
+            {
+                Scene = "Map";
+            }
         }
         public void Draw(SpriteBatch spriteBatch,GameWindow Window, Texture2D pixel)
         {
@@ -207,7 +192,7 @@ namespace Mooshika.Scripts
             spriteBatch.Draw(BackGround, new Rectangle(0, 0, 480, 270), Color.White);
             
             int tilesize = 40 * scalesize;
-            int tilerow = 3;
+            int tilerow = 9;
             int tilepixel = 40;
 
             foreach (var item in TileMap)
@@ -220,7 +205,7 @@ namespace Mooshika.Scripts
                 Rectangle sourcerectangle = new Rectangle(x * tilepixel, y * tilepixel, tilepixel, tilepixel);
                 spriteBatch.Draw(Tile, rectangle, sourcerectangle, Color.White);
             }
-            tilerow = 18;
+            /*tilerow = 18;
             foreach (var item in TileMapp)
             {
                 Rectangle rectangle = new Rectangle((int)item.Key.X * tilesize - (int)campos.X, (int)item.Key.Y * tilesize - (int)campos.Y, tilesize, tilesize);
@@ -253,10 +238,14 @@ namespace Mooshika.Scripts
             foreach (var item in Items)
             {
                 item.Draw(spriteBatch, campos);
+            }*/
+
+
+            
+            foreach (var Ginari in Ginaris)
+            {
+                Ginari.Draw(spriteBatch, pixel);
             }
-
-
-
 
 
             spriteBatch.Draw(pixel, new Vector2(48, 25), new Rectangle(0, 0, (int)(Player.Health * 1.59f), 4), Color.DarkRed);
@@ -266,8 +255,6 @@ namespace Mooshika.Scripts
             spriteBatch.DrawString(Font, Player.potion1.ToString(), new Vector2(56, 38), Color.White,0,Vector2.Zero,0.25f,SpriteEffects.None,1);
             spriteBatch.DrawString(Font, Player.potion2.ToString(), new Vector2(73, 38), Color.White, 0, Vector2.Zero, 0.25f, SpriteEffects.None, 1);
 
-            spriteBatch.Draw(tutor, tutorpos - campos, Color.White);
-            spriteBatch.Draw(potion, tutorpos - campos + new Vector2(0, 20), Color.White);
             Player.Draw(spriteBatch);
         }
     }

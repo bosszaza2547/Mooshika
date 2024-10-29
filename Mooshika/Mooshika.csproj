@@ -13,6 +13,30 @@
   <ItemGroup>
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
+    <None Remove="Map Data\BossElavan_Coliision.csv" />
+    <None Remove="Map Data\BossElavan_Tile.csv" />
+    <None Remove="Map Data\BossGinari_Coliision.csv" />
+    <None Remove="Map Data\BossGinari_Tile.csv" />
+    <None Remove="Map Data\BossKrut_Coliision.csv" />
+    <None Remove="Map Data\BossKrut_Tile.csv" />
+    <None Remove="Map Data\BossPrayanak_Coliision.csv" />
+    <None Remove="Map Data\BossPrayanak_Tile.csv" />
+    <None Remove="Map Data\Elavan_Stage_collsion.csv" />
+    <None Remove="Map Data\Elavan_Stage_decoration.csv" />
+    <None Remove="Map Data\Elavan_Stage_enemy.csv" />
+    <None Remove="Map Data\Elavan_Stage_item.csv" />
+    <None Remove="Map Data\Elavan_Stage_tile.csv" />
+    <None Remove="Map Data\Krut_Stage_collision.csv" />
+    <None Remove="Map Data\Krut_Stage_deco.csv" />
+    <None Remove="Map Data\Krut_Stage_enemy.csv" />
+    <None Remove="Map Data\Krut_Stage_item.csv" />
+    <None Remove="Map Data\Krut_Stage_tile.csv" />
+    <None Remove="Map Data\Krut_Stage_tile2.csv" />
+    <None Remove="Map Data\Platform_Stage_Ginari_collision.csv" />
+    <None Remove="Map Data\Platform_Stage_Ginari_decoration assect.csv" />
+    <None Remove="Map Data\Platform_Stage_Ginari_enemy.csv" />
+    <None Remove="Map Data\Platform_Stage_Ginari_item.csv" />
+    <None Remove="Map Data\Platform_Stage_Ginari_tile.csv" />
     <None Remove="Map Data\Platform_Stage_Prayanak_Collision.csv" />
     <None Remove="Map Data\Platform_Stage_Prayanak_DecoTile.csv" />
     <None Remove="Map Data\Platform_Stage_Prayanak_DecoTile2.csv" />
@@ -27,6 +51,78 @@
     <None Remove="Map Data\untitled_Tile Layer 1.csv" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Map Data\BossElavan_Coliision.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\BossElavan_Tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\BossGinari_Coliision.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\BossGinari_Tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\BossKrut_Coliision.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\BossKrut_Tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\BossPrayanak_Coliision.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\BossPrayanak_Tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Elavan_Stage_collsion.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Elavan_Stage_decoration.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Elavan_Stage_enemy.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Elavan_Stage_item.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Elavan_Stage_tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Krut_Stage_collision.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Krut_Stage_deco.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Krut_Stage_enemy.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Krut_Stage_item.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Krut_Stage_tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Krut_Stage_tile2.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Ginari_collision.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Ginari_decoration assect.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Ginari_enemy.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Ginari_item.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Map Data\Platform_Stage_Ginari_tile.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Map Data\Platform_Stage_Prayanak_Collision.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

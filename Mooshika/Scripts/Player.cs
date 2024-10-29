@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -22,6 +23,7 @@ namespace Mooshika.Scripts
         public int Speed = 75;
         public int MaxSpeed = 4;
         public int Gravity = 30;
+        public SoundEffect hit;
         public int MaxGravity = 20;
         KeyboardState KeyboardState;
         KeyboardState PreviousKeyBoardState;
@@ -89,7 +91,8 @@ namespace Mooshika.Scripts
         public int potion2 = 0;
         public int SpeedBoost = 2;
         public float Boosttime = 0;
-
+        public string power = string.Empty;
+        //List<Rectangle> recs = new List<Rectangle>();
         public Vector2 campos;
         public Player(Texture2D texture, Vector2 position, Vector2 scale, Color color, GameWindow window, Texture2D pixel, Texture2D projectile) : base(texture, position, scale, color, window)
         {
@@ -100,6 +103,11 @@ namespace Mooshika.Scripts
         }
         public void Update(GameTime gameTime, Vector2 campos, List<Rectangle> tiles, List<Rectangle> platforms, List<MeleeEnemy> meleeEnemies, List<RangedEnemy> rangedEnemies, List<Items> items)
         {
+            if (power == "Double Jump")
+            {
+                MaxJump = 2;
+            }
+            else MaxJump = 1;
             flash = false;
             this.campos = campos;
             attackactive = false;
@@ -212,7 +220,7 @@ namespace Mooshika.Scripts
                     }*/
                 }
             }
-            if (KeyboardState.IsKeyDown(Keys.LeftShift) && !PreviousKeyBoardState.IsKeyDown(Keys.LeftShift) && candash)
+            if (KeyboardState.IsKeyDown(Keys.LeftShift) && !PreviousKeyBoardState.IsKeyDown(Keys.LeftShift) && candash && power == "Dash")
             {
                 if (state != "dashing" && !Attacking)
                 {
@@ -275,6 +283,11 @@ namespace Mooshika.Scripts
             Position += new Vector2((int)Velocity.X, (int)Velocity.Y);
             hitbox = new Rectangle((int)Position.X, (int)Position.Y, hitbox.Width, hitbox.Height);
             flashsize = new Rectangle((int)campos.X, (int)campos.Y, 480, 270);
+            if (KeyboardState.IsKeyDown(Keys.G) && !PreviousKeyBoardState.IsKeyDown(Keys.G))
+            {
+                Position.X++;
+            }
+            //Debug.WriteLine(Position);
             if (Health > 0)
             {
                 TileCollision(tiles);
@@ -295,7 +308,6 @@ namespace Mooshika.Scripts
             }
             if (Position.Y > 800)
                 Health = 0;
-            Debug.WriteLine(dead);
             if (Health > MaxHealth) 
             {
                 Health = MaxHealth;
@@ -307,14 +319,14 @@ namespace Mooshika.Scripts
                 AttackCombo = 4;
                 AttackComboTime = AttackComboTimer;
             }
-            if (KeyboardState.IsKeyDown(Keys.E) && CanAttack && !Attacking)
+            if (KeyboardState.IsKeyDown(Keys.E) && CanAttack && !Attacking && power == "Charge Attack")
             {
                 Attacking = true;
                 AttackTime = AttackTimer5;
                 AttackCombo = 5;
                 AttackComboTime = AttackComboTimer;
             }
-            if (KeyboardState.IsKeyDown(Keys.F) && CanAttack && !Attacking)
+            if (KeyboardState.IsKeyDown(Keys.E) && CanAttack && !Attacking && power == "Flash")
             {
                 Attacking = true;
                 AttackTime = AttackTimer6;
@@ -324,6 +336,10 @@ namespace Mooshika.Scripts
 
             if (Mouse.GetState().LeftButton == ButtonState.Pressed && CanAttack && !Attacking)
             {
+                if(hit != null)
+                {
+                    hit.Play();
+                }
                 Attacking = true;
                 if (AttackCombo == 0)
                     AttackTime = AttackTimer;
@@ -366,15 +382,15 @@ namespace Mooshika.Scripts
             AttackPosition.Y = Position.Y + hitbox.Height / 2 - (AttackCombo == 1 ? AttackRectangle : (AttackCombo == 2 ? AttackRectangle2 : AttackRectangle3)).Height / 2;
             if (AttackCombo == 1)
             {
-                Damage = 20;
+                Damage = 10;
             }
             else if (AttackCombo == 2)
             {
-                Damage = 30;
+                Damage = 20;
             }
             else if (AttackCombo == 3)
             {
-                Damage = 50;
+                Damage = 30;
             }
             //Debug.WriteLine(AttackTime);
             /*AttackRectangle.X = (int)AttackPosition.X + ((Direction == 1) ? +30 : -60);
@@ -643,6 +659,11 @@ namespace Mooshika.Scripts
         public void Update(GameTime gameTime, Vector2 campos, List<Rectangle> tiles, List<Rectangle> platforms, List<Rectangle> bossattacks)
         {
             {
+                if (power == "Double Jump")
+                {
+                    MaxJump = 2;
+                }
+                else MaxJump = 1;
                 flash = false;
                 this.campos = campos;
                 attackactive = false;
@@ -752,7 +773,7 @@ namespace Mooshika.Scripts
                         }*/
                     }
                 }
-                if (KeyboardState.IsKeyDown(Keys.LeftShift) && !PreviousKeyBoardState.IsKeyDown(Keys.LeftShift) && candash)
+                if (KeyboardState.IsKeyDown(Keys.LeftShift) && !PreviousKeyBoardState.IsKeyDown(Keys.LeftShift) && candash && power == "Dash")
                 {
                     if (state != "dashing" && !Attacking)
                     {
@@ -815,11 +836,27 @@ namespace Mooshika.Scripts
                 Position += new Vector2((int)Velocity.X, (int)Velocity.Y);
                 hitbox = new Rectangle((int)Position.X, (int)Position.Y, hitbox.Width, hitbox.Height);
                 flashsize = new Rectangle((int)campos.X, (int)campos.Y, 480, 270);
+                if (KeyboardState.IsKeyDown(Keys.G) && !PreviousKeyBoardState.IsKeyDown(Keys.G)) 
+                {
+                    Position.X++;
+                }
+                //Debug.WriteLine(Position);
                 if (Health > 0)
                 {
                     TileCollision(tiles);
+                    PlatformCollision(platforms);
                     bossattackscheck(bossattacks);
-                    Debug.WriteLine("real");
+                    if (Position.X < 0)
+                    {
+                        Position.X = 0;
+                        Velocity.X = 0;
+                    }
+                    else if (Position.X > 448)
+                    {
+                        Position.X = 448;
+                        Velocity.X = 0;
+                    }
+                    
                 }
                 else
                 {
@@ -845,14 +882,14 @@ namespace Mooshika.Scripts
                     AttackCombo = 4;
                     AttackComboTime = AttackComboTimer;
                 }
-                if (KeyboardState.IsKeyDown(Keys.E) && CanAttack && !Attacking)
+                if (KeyboardState.IsKeyDown(Keys.E) && CanAttack && !Attacking && power == "Charge Attack")
                 {
                     Attacking = true;
                     AttackTime = AttackTimer5;
                     AttackCombo = 5;
                     AttackComboTime = AttackComboTimer;
                 }
-                if (KeyboardState.IsKeyDown(Keys.F) && CanAttack && !Attacking)
+                if (KeyboardState.IsKeyDown(Keys.E) && CanAttack && !Attacking && power == "Flash")
                 {
                     Attacking = true;
                     AttackTime = AttackTimer6;
@@ -1236,6 +1273,7 @@ namespace Mooshika.Scripts
                     }
                 }
             }
+            //recs = bossattacks;
         }
         public void RangedEnemyProjectileCollision()
         {
@@ -1267,7 +1305,7 @@ namespace Mooshika.Scripts
                 float moveup = Wall.Y - hitbox.Height;
                 float movedown = Wall.Y + Wall.Height;
 
-                Vector2 topleft = Position;
+                Vector2 topleft = Position + new Vector2(0, 0); ;
                 Vector2 topright = Position + new Vector2(hitbox.Width, 0);
                 Vector2 botttomleft = Position + new Vector2(0, hitbox.Height);
                 Vector2 botttomright = Position + new Vector2(hitbox.Width, hitbox.Height);
@@ -1280,7 +1318,7 @@ namespace Mooshika.Scripts
                 pos3 = Vector2.Normalize(pos1 - pos2);
                 if (hitbox.Intersects(Wall))
                 {
-                    if (pos3.X < 0 && pos3.Y < 0)
+                    if (pos3.X <= 0 && pos3.Y <= 0)
                     {
                         if (Math.Abs(botttomright.X - Wall.X) < Math.Abs(botttomright.Y - Wall.Y))
                         {
@@ -1290,6 +1328,7 @@ namespace Mooshika.Scripts
                         }
                         else if (Math.Abs(botttomright.X - Wall.X) > Math.Abs(botttomright.Y - Wall.Y))
                         {
+                            
                             Position.Y = moveup;
                             Velocity.Y = 0;
                             JumpCount = MaxJump;
@@ -1297,7 +1336,7 @@ namespace Mooshika.Scripts
 
                         }
                     }
-                    else if (pos3.X > 0 && pos3.Y < 0)
+                    else if (pos3.X >= 0 && pos3.Y <= 0)
                     {
                         
                         if (Math.Abs(botttomleft.X - (Wall.X + Wall.Width)) < Math.Abs(botttomleft.Y - Wall.Y))
@@ -1325,7 +1364,7 @@ namespace Mooshika.Scripts
                         }
 
                     }
-                    else if (pos3.X < 0 && pos3.Y > 0)
+                    else if (pos3.X <= 0 && pos3.Y >= 0)
                     {
                         if (Math.Abs(topright.X - Wall.X) < Math.Abs(topright.Y - (Wall.Y + Wall.Height)))
                         {
@@ -1338,7 +1377,7 @@ namespace Mooshika.Scripts
                             Velocity.Y = 0;
                         }
                     }
-                    else if (pos3.X > 0 && pos3.Y > 0)
+                    else if (pos3.X >= 0 && pos3.Y >= 0)
                     {
                         if (Math.Abs(topleft.X - (Wall.X + Wall.Width)) < Math.Abs(topleft.Y - (Wall.Y + Wall.Height)))
                         {
@@ -1458,7 +1497,7 @@ namespace Mooshika.Scripts
                         CoyoteTime = CoyoteTimer;
                         
                     }
-                    else if (Velocity.Y > 0 && Position.Y - (hitbox.Height * 0.5) < Platform.Y && !FallThrough)
+                    else if (Velocity.Y > 0 && Position.Y - (hitbox.Height * 0.1) < Platform.Y && !FallThrough)
                     {
                         Position.Y = Platform.Y - hitbox.Height;
                         Velocity.Y = 0;
@@ -1531,10 +1570,15 @@ namespace Mooshika.Scripts
             SpriteBatch.Draw(Texture, new Rectangle((int)Position.X-8-32*scale - (int)campos.X, (int)Position.Y - (int)campos.Y-22, Rectangle.Width, Rectangle.Height), new Rectangle (frame* (int)framesize.X, row* (int)framesize.Y, (int)framesize.X, (int)framesize.Y), (InvincibleTime<=0)?Color : Color*0.75f, 0, Vector2.Zero, (state != "attacking" && state != "dashing" && JumpCount > 0) ? SpriteEffects.None : (Direction == 1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             //SpriteBatch.Draw(pixel, Position-campos, hitbox, Color.White);
             //SpriteBatch.Draw(pixel, Position-campos, new Rectangle(0,0,2,2), Color.White);
-            //SpriteBatch.Draw(pixel, Vector2.Zero, flashsize, Color.White*flashvalue);
+            SpriteBatch.Draw(pixel, Vector2.Zero, flashsize, Color.White*flashvalue*0.50f);
             /*foreach (var hit in MeleeEnemies)
             {
                 SpriteBatch.Draw(pixel, new Vector2(hit.cliffcheck.X - campos.X, hit.cliffcheck.Y - campos.Y), hit.cliffcheck, Color.White);
+            }*/
+            //SpriteBatch.Draw(pixel, Position-campos, new Rectangle(0,0,2,2), Color.White);
+            /*foreach (var Projectile in recs)
+            {
+                SpriteBatch.Draw(pixel, Projectile , Projectile, Color.White);
             }*/
         }
 

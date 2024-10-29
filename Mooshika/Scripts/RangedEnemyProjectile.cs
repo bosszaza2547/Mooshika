@@ -9,7 +9,8 @@ namespace Mooshika.Scripts
         public int speed = 4;
         public float lifespan = 3;
         public int Damage = 5;
-        public RangedEnemyProjectile(Texture2D texture, Vector2 pos, Vector2 scale, Color color, GameWindow gameWindow, int Direction) : base (texture, pos, scale, color, gameWindow)
+        
+        public RangedEnemyProjectile(Texture2D texture, Vector2 pos, Vector2 scale, Color color, GameWindow gameWindow, int Direction) : base(texture, pos, scale, color, gameWindow)
         {
             this.Direction = Direction;
         }
@@ -20,7 +21,7 @@ namespace Mooshika.Scripts
         }
         public virtual void Draw(SpriteBatch SpriteBatch, Vector2 campos)
         {
-            SpriteBatch.Draw(Texture, new Rectangle(Rectangle.X - (int)campos.X, Rectangle.Y - (int)campos.Y,Rectangle.Width,Rectangle.Height), Color);
+            SpriteBatch.Draw(Texture, new Rectangle(Rectangle.X - (int)campos.X, Rectangle.Y - (int)campos.Y, Rectangle.Width, Rectangle.Height), Color);
         }
     }
 }

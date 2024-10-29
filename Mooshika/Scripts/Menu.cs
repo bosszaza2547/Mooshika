@@ -76,14 +76,15 @@ namespace Mooshika.Scripts
             }
             if (mouserectangle.Intersects(Slider) && mouseState.LeftButton == ButtonState.Pressed)
             {
-                volumerec.Width = (int)(mouserectangle.X - Offset.X - volumerec.X);
+                volumerec.Width = (int)(mouserectangle.X  - volumerec.X);
+                if (volumerec.Width < 0)
+                    volumerec.Width = 0;
                 /*if (volumerec.Width < 0) 
                     volumerec.Width = 0;
                 if (volumerec.Width > 56) 
                     volumerec.Width = 56;*/
             }
             volume = volumerec.Width / 56f;
-            //Debug.WriteLine(volume);
         }
         public void Draw(SpriteBatch spriteBatch, GameWindow Window,Texture2D pixel)
         {

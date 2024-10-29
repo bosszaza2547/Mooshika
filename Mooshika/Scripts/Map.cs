@@ -39,11 +39,11 @@ namespace Mooshika.Scripts
 
             if (mouserectangle.Intersects(GinariRectangle) && mouseState.LeftButton == ButtonState.Released && mouseState.LeftButton != mouseState2.LeftButton)
             {
-                Scene = "Stage Test";
+                Scene = "Before Ginari";
             }
             if (mouserectangle.Intersects(PrayaKrutRectangle) && mouseState.LeftButton == ButtonState.Released && mouseState.LeftButton != mouseState2.LeftButton)
             {
-                Scene = "Stage Test";
+                Scene = "Before Krut";
             }
             if (mouserectangle.Intersects(PrayanakRectangle) && mouseState.LeftButton == ButtonState.Released && mouseState.LeftButton != mouseState2.LeftButton && !mouserectangle.Intersects(ElavanRectangle))
             {
@@ -51,7 +51,7 @@ namespace Mooshika.Scripts
             }
             if (mouserectangle.Intersects(ElavanRectangle) && mouseState.LeftButton == ButtonState.Released && mouseState.LeftButton != mouseState2.LeftButton)
             {
-                Scene = "TestBoss";
+                Scene = "Before Elavan";
             }
             if (mouserectangle.Intersects(MenuRectangle) && mouseState.LeftButton == ButtonState.Released && mouseState.LeftButton != mouseState2.LeftButton)
             {

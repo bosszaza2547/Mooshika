@@ -3,12 +3,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq.Expressions;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Mooshika.Scripts
 {
-    internal class Elavan : Enemy
+    internal class Krut : Enemy
     {
         Vector2 velocity = Vector2.Zero;
         int frame = 0;
@@ -16,27 +15,35 @@ namespace Mooshika.Scripts
         float frametime = 0;
         int row = 0;
         int maxrow = 2;
-        string state = "melee";
+        string state = "range1";
         string prestate ;
         float cooldown = 3f;
-        public bool meleeattacking = false;
         bool rangeattacking = false;
         bool attacked = false;
         bool attacked2 = false;
         bool dead = false;
         Texture2D spike;
-        Rectangle spikerec = new Rectangle(0,0,64,96);
-        public Rectangle spikebox = new Rectangle(0, 0, 44, 0);
+        Texture2D flame;
+        Rectangle flamerec = new Rectangle(0,0,32,128);
+        public Rectangle flamebox = new Rectangle(0, 0, 32, 0);
+        Rectangle spikerec = new Rectangle(0, 0, 64, 41);
+        public Rectangle spikebox = new Rectangle(0, 0, 64, 41);
 
-        int spikeframe = 14;
+        int flameframe = 6;
+        float flameframetime = 0;
+        int maxflameframe = 5;
+        Vector2 flamepos = new Vector2(-20,0);
+        bool flameactive = false;
+        int spikeframe = 6;
         float spikeframetime = 0;
-        int maxspikeframe = 11;
-        Vector2 spikepos = new Vector2(-20,0);
-        bool spikeactive = false;
+        int maxspikeframe = 5;
+        Vector2 spikepos = new Vector2(-20, 0);
+        public bool spikeactive = false;
 
-        public Elavan(Texture2D texture, Vector2 position, Vector2 scale, Color color, GameWindow window,Texture2D spike) : base (texture, position, scale, color, window) 
+        public Krut(Texture2D texture, Vector2 position, Vector2 scale, Color color, GameWindow window,Texture2D flame, Texture2D spike) : base (texture, position, scale, color, window) 
         {
             Position = new Vector2 (480-Scale.X, 290-40-Scale.Y);
+            this.flame = flame;
             this.spike = spike;
             MaxHealth = 1000;
             Health = 1000;
@@ -49,35 +56,36 @@ namespace Mooshika.Scripts
             if (Health > 0)
             {
                 PlayerAttacked(Player);
-                if (spikeframe == 0)
+                if (flameframe == 0)
                 {
-                    spikebox.Height = 0;
+                    flamebox.Height = 58;
                 }
-                else if (spikeframe == 1)
+                else if (flameframe == 1)
                 {
-                    spikebox.Height = 25;
+                    flamebox.Height = 85;
                 }
-                else if (spikeframe == 3)
+                else if (flameframe == 2)
                 {
-                    spikebox.Height = 49;
+                    flamebox.Height = 120;
                 }
-                else if (spikeframe == 5)
+                else if (flameframe == 3)
                 {
-                    spikebox.Height = 70;
+                    flamebox.Height = 128;
                 }
-                else if (spikeframe == 6)
+                else if (flameframe == 4)
                 {
-                    spikebox.Height = 87;
+                    flamebox.Height = 120;
                 }
 
+                flamebox = new Rectangle((int)flamepos.X, (int)flamepos.Y + flamerec.Height - flamebox.Height, flamebox.Width, flamebox.Height);
                 spikebox = new Rectangle((int)spikepos.X, (int)spikepos.Y + spikerec.Height - spikebox.Height, spikebox.Width, spikebox.Height);
                 if (cooldown < 0)
                 {
-                    if (Player.hitbox.Intersects(Rectangle))
+                    if (Health >= MaxHealth/2)
                     {
-                        state = "melee";
+                        state = "range1";
                     }
-                    else if (!spikeactive) state = "range";
+                    else if (!flameactive) state = "range2";
                 }
                 else
                 {
@@ -90,25 +98,25 @@ namespace Mooshika.Scripts
                         frame = 0;
                     row = 0;
                     maxrow = 1;
-                    maxframe = 8;
+                    maxframe = 6;
                 }
-                else if (state == "melee")
-                {
-                    if (prestate != state)
-                        frame = 0;
-                    if (row != 1 && row != 2)
-                        row = 1;
-                    maxrow = 2;
-                    maxframe = 10;
-                }
-                else if (state == "range")
+                else if (state == "range2")
                 {
                     if (prestate != state)
                         frame = 0;
                     if (row != 3 && row != 4)
                         row = 3;
                     maxrow = 2;
-                    maxframe = 10;
+                    maxframe = 9;
+                }
+                else if (state == "range1")
+                {
+                    if (prestate != state)
+                        frame = 0;
+                    if (row != 1 && row != 2)
+                        row = 1;
+                    maxrow = 2;
+                    maxframe = 9;
                 }
                 if (frametime < 0)
                 {
@@ -124,58 +132,32 @@ namespace Mooshika.Scripts
                 {
                     frametime -= Deltatime;
                 }
-                if (spikeframetime < 0)
-                {
-                    if (spikeactive)
-                        spikeframe++;
-                    spikeframetime = 1f / 24f;
-                }
-                else
-                {
-                    spikeframetime -= Deltatime;
-                }
-                /*if (frame == 3  && row == 1)
-                {
-                    Sound.Play();
-                }
-                else if (frame == 3 && row == 3)
-                {
-                    Sound.Play();
-                }*/
                 if (frame > 0 && row == 2)
                 {
-                    meleeattacking = true;
-                    if (frame == 9)
+                    if (frame == 8)
                     {
                         attacked2 = true;
+                        spikepos = new Vector2(Player.Position.X-spikebox.Width/2/2, 40 * 6 - spikerec.Height);
+                        spikeframe = 0;
+                        spikeactive = true;
                     }
-                }
-                else
-                {
-                    if (attacked2)
-                    {
-                        cooldown = 3f;
-                        attacked2 = false;
-                    }
-                    meleeattacking = false;
                 }
                 if (frame > 0 && row == 4)
                 {
-                    if (frame == 9)
+                    if (frame == 8)
                     {
                         attacked2 = true;
-                        spikepos = new Vector2(40 * 6, 40 * 6 - spikerec.Height);
+                        flamepos = new Vector2(40 * 11, 40 * 6 - flamerec.Height);
                     }
                 }
                 else
                 {
                     if (attacked2)
                     {
-                        cooldown = 3f;
+                        cooldown = 2f;
                         attacked2 = false;
                     }
                 }
-                
             }
             else
             {
@@ -189,16 +171,42 @@ namespace Mooshika.Scripts
             }
             //Debug.WriteLine(Health);
             prestate = state;
-            if (spikeframe > 12)
+            if (flameframetime < 0)
             {
-                spikepos = new Vector2(spikepos.X - 40, 40 * 6 - spikerec.Height);
-                spikeframe = 0;
+                if (flameactive)
+                    flameframe++;
+                flameframetime = 1f / 24f;
             }
-            if (spikepos.X < -40)
+            else
+            {
+                flameframetime -= Deltatime;
+            }
+            if (spikeframetime < 0 && spikeactive)
+            {
+                spikeframe++;
+                spikeframetime = 1f / 12f;
+            }
+            else
+            {
+                spikeframetime -= Deltatime;
+            }
+
+            if (flameframe > 5)
+            {
+                flamepos = new Vector2(flamepos.X - 40, 40 * 6 - flamerec.Height);
+                flameframe = 0;
+            }
+            if (spikeframe > 5)
             {
                 spikeactive = false;
+                spikeframe = 6;
             }
-            else { spikeactive = true; }
+            if (flamepos.X < -40)
+            {
+                flameactive = false;
+            }
+            else { flameactive = true; }
+
         }
         public void PlayerAttacked(Player Player)
         {
@@ -236,7 +244,8 @@ namespace Mooshika.Scripts
         {
             spriteBatch.Draw(Texture, Position, new Rectangle(frame* (int)Scale.X, row * (int)Scale.Y, (int)Scale.X, (int)Scale.Y), Color.White);
             //spriteBatch.Draw(spike, new Vector2(40*10,40*8), new Rectangle(spikeframe * spikerec.Width, spikerec.Height, spikerec.Width, spikerec.Height), Color.White);
-            spriteBatch.Draw(spike, spikepos,new Rectangle(spikerec.Width*spikeframe, 0, spikerec.Width, spikerec.Height), Color.White);
+            spriteBatch.Draw(flame, flamepos, new Rectangle(flamerec.Width* flameframe, 0, flamerec.Width, flamerec.Height), Color.White);
+            spriteBatch.Draw(spike, spikepos, new Rectangle(spikerec.Width * spikeframe, 23, spikerec.Width, spikerec.Height), Color.White);
             //spriteBatch.Draw(pixel, spikebox, Color.White);
             //spriteBatch.Draw(pixel, Rectangle, Color.White);
         }

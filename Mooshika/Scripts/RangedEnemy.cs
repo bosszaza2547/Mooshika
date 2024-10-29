@@ -49,6 +49,7 @@ namespace Mooshika.Scripts
         }
         public void Update(GameTime GameTime, Player Player, List<Rectangle> Walls, List<Rectangle> Platforms, Vector2 campos)
         {
+            this.campos = campos;
             if (Rectangle.Intersects(Player.flashsize))
             {
                 if(stunned)
@@ -57,7 +58,7 @@ namespace Mooshika.Scripts
                     stunned = false;
                     else stuntime -= (float)GameTime.ElapsedGameTime.TotalSeconds;
                 }
-                this.campos = campos;
+                
                 if (!CanMove || stunned)
                     shoottime = shoottimer;
                 /*if (shoottime <= 0)
@@ -223,7 +224,7 @@ namespace Mooshika.Scripts
                 pos3 = Vector2.Normalize(pos1 - pos2);
                 if (Rectangle.Intersects(Wall))
                 {
-                    if (pos3.X < 0 && pos3.Y < 0)
+                    if (pos3.X <= 0 && pos3.Y <= 0)
                     {
                         if (Math.Abs(botttomright.X - Wall.X) < Math.Abs(botttomright.Y - Wall.Y)-1)
                         {
@@ -238,7 +239,7 @@ namespace Mooshika.Scripts
                             CanMove = true;
                         }
                     }
-                    else if (pos3.X > 0 && pos3.Y < 0)
+                    else if (pos3.X >= 0 && pos3.Y <= 0)
                     {
                         if (Math.Abs(botttomleft.X - Wall.X - Wall.Width) < Math.Abs(botttomleft.Y - Wall.Y)-1)
                         {
@@ -253,7 +254,7 @@ namespace Mooshika.Scripts
                             CanMove = true;
                         }
                     }
-                    else if (pos3.X < 0 && pos3.Y > 0)
+                    else if (pos3.X <= 0 && pos3.Y >= 0)
                     {
                         if (Math.Abs(topright.X - Wall.X) < Math.Abs(topright.Y - Wall.Y - Wall.Height)-1)
                         {
@@ -267,7 +268,7 @@ namespace Mooshika.Scripts
                             Velocity.Y = 0;
                         }
                     }
-                    else if (pos3.X > 0 && pos3.Y > 0)
+                    else if (pos3.X >= 0 && pos3.Y >= 0)
                     {
                         if (Math.Abs(topleft.X - Wall.X - Wall.Width) < Math.Abs(topleft.Y - Wall.Y - Wall.Height)-1)
                         {

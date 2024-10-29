@@ -37,8 +37,6 @@ namespace Mooshika.Scripts
         public MeleeEnemy (Texture2D texture, Vector2 position, Vector2 scale, Color color, GameWindow window, int direction, int speed, int health, int type) : base (texture, position, scale, color, window) 
         {
             Direction = direction;
-            Health = 100;
-            MaxHealth = 100;
             Speed = speed;
             MaxHealth = health;
             Health = health;
@@ -160,7 +158,7 @@ namespace Mooshika.Scripts
                 pos3 = Vector2.Normalize(pos1 - pos2);
                 if (Rectangle.Intersects(Wall))
                 {
-                    if (pos3.X < 0 && pos3.Y < 0)
+                    if (pos3.X <= 0 && pos3.Y <= 0)
                     {
                         if (Math.Abs(botttomright.X - Wall.X) < Math.Abs(botttomright.Y - Wall.Y)-1)
                         {
@@ -176,7 +174,7 @@ namespace Mooshika.Scripts
                             CanMove = true;
                         }
                     }
-                    else if (pos3.X > 0 && pos3.Y < 0)
+                    else if (pos3.X >= 0 && pos3.Y <= 0)
                     {
                         if (Math.Abs(botttomleft.X - Wall.X - Wall.Width) < Math.Abs(botttomleft.Y - Wall.Y)-1)
                         {
@@ -192,7 +190,7 @@ namespace Mooshika.Scripts
                             CanMove = true;
                         }
                     }
-                    else if (pos3.X < 0 && pos3.Y > 0)
+                    else if (pos3.X <= 0 && pos3.Y >= 0)
                     {
                         if (Math.Abs(topright.X - Wall.X) < Math.Abs(topright.Y - Wall.Y - Wall.Height)-1)
                         {
@@ -208,7 +206,7 @@ namespace Mooshika.Scripts
                             Velocity.Y = 0;
                         }
                     }
-                    else if (pos3.X > 0 && pos3.Y > 0)
+                    else if (pos3.X >= 0 && pos3.Y >= 0)
                     {
                         if (Math.Abs(topleft.X - Wall.X - Wall.Width) < Math.Abs(topleft.Y - Wall.Y - Wall.Height)-1)
                         {
@@ -256,7 +254,9 @@ namespace Mooshika.Scripts
             if (Type==1)
                 SpriteBatch.Draw(Texture, new Rectangle((int)Position.X - (int)campos.X, (int)Position.Y - (int)campos.Y, Rectangle.Width, Rectangle.Height), new Rectangle(frame * 64, 0, 64, 59), Color, 0, Vector2.Zero, (Direction != 1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
             else if (Type==2)
+            {
                 SpriteBatch.Draw(Texture, new Rectangle((int)Position.X - (int)campos.X, (int)Position.Y - (int)campos.Y, Rectangle.Width, Rectangle.Height), new Rectangle(frame * 64, 59, 64, 54), Color, 0, Vector2.Zero, (Direction != 1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+            }
 
         }
         public void PlayerAttacked(Player Player)

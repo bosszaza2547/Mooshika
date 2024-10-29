@@ -27,7 +27,7 @@ namespace Mooshika.Scripts
         {
             Interface = Content.Load<Texture2D>("Sprites/Menu_Interface");
             BackGround = Content.Load<Texture2D>("Sprites/Menu_Background");
-            Title = Content.Load<Texture2D>("Sprites/Title");
+            Title = Content.Load<Texture2D>("Sprites/Game_Title");
         }
         public void Update(GameTime gameTime,Game Game, Vector2 Offset, float Scale)
         {
@@ -53,7 +53,7 @@ namespace Mooshika.Scripts
         public void Draw(SpriteBatch spriteBatch, GameWindow Window)
         {
             spriteBatch.Draw(BackGround, Vector2.Zero/*new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height)*/, Color.White);
-            spriteBatch.Draw(Title, new Rectangle(50, 50, 150, 32), Color.White);
+            spriteBatch.Draw(Title, new Rectangle(50, 50, 151*2, 41*2), Color.White);
             if (mouserectangle.Intersects(StartRectangle) && mouseState.LeftButton == ButtonState.Pressed)
             {
                 spriteBatch.Draw(Interface, StartRectangle, StartRectangle2, Color.Gray);

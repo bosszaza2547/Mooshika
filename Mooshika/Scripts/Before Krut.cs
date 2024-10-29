@@ -15,7 +15,7 @@ using MonoGame.Extended.Tiled.Renderers;
 
 namespace Mooshika.Scripts
 {
-    internal class BeforePrayanak : GameScene
+    internal class BeforeKrut : GameScene
     {
 
         GraphicsDevice GraphicsDevice;
@@ -24,7 +24,7 @@ namespace Mooshika.Scripts
         const int MapHeight = 800;
         
 
-        public String Scene = "Before Prayanak";
+        public String Scene = "Before Krut";
         Texture2D BackGround;
         
         Texture2D Health;
@@ -32,8 +32,6 @@ namespace Mooshika.Scripts
         SpriteFont Font;
 
         public Player Player;
-        Texture2D tutor, potion;
-        Vector2 tutorpos;
         Vector2 campos;
 
         List<MeleeEnemy> MeleeEnemies = new List<MeleeEnemy>();
@@ -44,17 +42,19 @@ namespace Mooshika.Scripts
         List<Items> Items = new List<Items>();
         Texture2D Item;
 
+        Texture2D tutor, potion;
+        Vector2 tutorpos;
         Dictionary<Vector2, int> TileMap;
-        Dictionary<Vector2, int> TileMapp;
-        Dictionary<Vector2, int> TileMappp;
+        Dictionary<Vector2, int> TileMap2;
         Dictionary<Vector2, int> CollisionMap;
         Dictionary<Vector2, int> EnemyMap;
+        Dictionary<Vector2, int> TileMapp;
         Dictionary<Vector2, int> ItemsMap;
 
         Texture2D Tile;
-        Texture2D DecoTile;
-        Texture2D DecoTile2;
+        Texture2D Tile2;
         Texture2D CollisionTile;
+        Texture2D DecoTile;
 
         public KeyboardState KeyboardState, KeyboardState2;
         int scalesize = 1;
@@ -62,7 +62,6 @@ namespace Mooshika.Scripts
 
         List<Rectangle> Tiles = new List<Rectangle>();
         List<Rectangle> Platforms = new List<Rectangle>();
-
         public bool menu = false;
         public void LoadContent(ContentManager Content, GameWindow Window, Texture2D pixel, GraphicsDevice graphicsDevice)
         {
@@ -70,15 +69,15 @@ namespace Mooshika.Scripts
             GraphicsDevice = graphicsDevice;
             
 
-            Scene = "Before Prayanak";
+            Scene = "Before Krut";
             scalesize = 1;
             tilesize = 40;
-            TileMap = LoadMap("Map Data/Platform_Stage_Prayanak_Tile.csv");
-            TileMapp = LoadMap("Map Data/Platform_Stage_Prayanak_DecoTile.csv");
-            TileMappp = LoadMap("Map Data/Platform_Stage_Prayanak_DecoTile2.csv");
-            CollisionMap = LoadMap("Map Data/Platform_Stage_Prayanak_Collision.csv");
-            ItemsMap = LoadMap("Map Data/Platform_Stage_Prayanak_Items.csv");
-            EnemyMap = LoadMap("Map Data/Platform_Stage_Prayanak_Enemy.csv");
+            TileMap = LoadMap("Map Data/Krut_Stage_tile.csv");
+            TileMap2 = LoadMap("Map Data/Krut_Stage_tile2.csv");
+            TileMapp = LoadMap("Map Data/Krut_Stage_deco.csv");
+            CollisionMap = LoadMap("Map Data/Krut_Stage_collision.csv");
+            ItemsMap = LoadMap("Map Data/Krut_Stage_item.csv");
+            EnemyMap = LoadMap("Map Data/Krut_Stage_enemy.csv");
 
             /*TileMap = LoadMap("../../../Map Data/Platform_Stage_Prayanak_Tile.csv");
             TileMapp = LoadMap("../../../Map Data/Platform_Stage_Prayanak_DecoTile.csv");
@@ -129,20 +128,20 @@ namespace Mooshika.Scripts
 
             Font = Content.Load<SpriteFont>("Fonts/Font");
             BackGround = Content.Load<Texture2D>("Sprites/bggg");
-            Health = Content.Load<Texture2D>("Sprites/Skill4");
+            Health = Content.Load<Texture2D>("Sprites/Skill2");
             ItemsIcons = Content.Load<Texture2D>("Sprites/ItemsSlot");
 
             PlayerProjectile = Content.Load<Texture2D>("Sprites/player_S_Atk_EF");
-            Player = new Player(Content.Load<Texture2D>("Sprites/Player_SpriteSheet"), new Vector2(2*40, 14*40), new Vector2(112 * scalesize, 54 * scalesize), Color.White, Window, pixel, PlayerProjectile);
+            Player = new Player(Content.Load<Texture2D>("Sprites/Player_SpriteSheet"), new Vector2(1*40, 3*40), new Vector2(112 * scalesize, 54 * scalesize), Color.White, Window, pixel, PlayerProjectile);
 
-            Player.power = "Flash";
+            Player.power = "Dash";
             campos.X = Player.Position.X - 480 / 2;
 
             Tile = Content.Load<Texture2D>("TileMap/Tiles");
+            Tile2 = Content.Load<Texture2D>("TileMap/clouddddd");
             DecoTile = Content.Load<Texture2D>("TileMap/AssetsForestttt");
-            DecoTile2 = Content.Load<Texture2D>("TileMap/stone_platoformmmmmm");
             CollisionTile = Content.Load<Texture2D>("TileMap/tilecollision");
-            tutor = Content.Load<Texture2D>("Sprites/FlashE");
+            tutor = Content.Load<Texture2D>("Sprites/ShiftDash");
             potion = Content.Load<Texture2D>("Sprites/12Items");
             tutorpos = Player.Position + new Vector2(10, 0);
         }
@@ -170,9 +169,9 @@ namespace Mooshika.Scripts
                 else if (Player.Position.Y > 665)
                     campos.Y = 530;
             }
-            if (Player.Position.X > 2400)
+            if(Player.Position.X > 2400)
             {
-                Scene = ("PrayanakBoss");
+                Scene = ("KrutBoss");
             }
             //Debug.WriteLine(campos);
 
@@ -220,6 +219,17 @@ namespace Mooshika.Scripts
                 Rectangle sourcerectangle = new Rectangle(x * tilepixel, y * tilepixel, tilepixel, tilepixel);
                 spriteBatch.Draw(Tile, rectangle, sourcerectangle, Color.White);
             }
+            tilerow = 9;
+            foreach (var item in TileMap2)
+            {
+                Rectangle rectangle = new Rectangle((int)item.Key.X * tilesize - (int)campos.X, (int)item.Key.Y * tilesize - (int)campos.Y, tilesize, tilesize);
+
+                int x = item.Value % tilerow;
+                int y = item.Value / tilerow;
+
+                Rectangle sourcerectangle = new Rectangle(x * tilepixel, y * tilepixel, tilepixel, tilepixel);
+                spriteBatch.Draw(Tile2, rectangle, sourcerectangle, Color.White);
+            }
             tilerow = 18;
             foreach (var item in TileMapp)
             {
@@ -230,17 +240,6 @@ namespace Mooshika.Scripts
 
                 Rectangle sourcerectangle = new Rectangle(x * tilepixel, y * tilepixel, tilepixel, tilepixel);
                 spriteBatch.Draw(DecoTile, rectangle, sourcerectangle, Color.White);
-            }
-            tilerow = 9;
-            foreach (var item in TileMappp)
-            {
-                Rectangle rectangle = new Rectangle((int)item.Key.X * tilesize - (int)campos.X, (int)item.Key.Y * tilesize - (int)campos.Y, tilesize, tilesize);
-
-                int x = item.Value % tilerow;
-                int y = item.Value / tilerow;
-
-                Rectangle sourcerectangle = new Rectangle(x * tilepixel, y * tilepixel, tilepixel, tilepixel);
-                spriteBatch.Draw(DecoTile2, rectangle, sourcerectangle, Color.White);
             }
             foreach (var MeleeEnemy in MeleeEnemies)
             {
